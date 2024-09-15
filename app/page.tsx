@@ -123,10 +123,6 @@ export default function Home() {
             質問する
           </button>
         </div>
-        {isLoading ? (
-          <div className="font-medium leading-6 text-lg text-indigo-700 pb-2">読み込み中...</div>
-        ) : (
-          <>
             {error && <div className="mt-4 text-red-500">{error}</div>}
             {output && (
               <>
@@ -134,8 +130,8 @@ export default function Home() {
                 <p className="mt-2 text-gray-700">{output}</p>
               </>
             )}
-          </>
-        )}
+
+        
       </div>
     </div>
   );

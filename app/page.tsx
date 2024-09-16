@@ -2,12 +2,25 @@
 
 import React, { useState, FormEvent,useRef  } from "react";
 import { BeakerIcon } from '@heroicons/react/24/solid'
+import ReactMarkdown from "react-markdown";
 
 // メッセージ
 interface Message {
   role: string;
   content: string;
 }
+
+const MultiLineBody = ({ body }: { body: string }) => {
+  const texts = body.split('\n').map((item, index) => {
+    return (
+      <React.Fragment key={index}>
+        {item}
+        <br />
+      </React.Fragment>
+    );
+  });
+  return <div>{texts}</div>;
+};
 
 // ホーム
 export default function Home() {
@@ -51,8 +64,8 @@ export default function Home() {
         while (boundary !== -1) {
           buffer += chunk.slice(3, boundary-1);
           chunk = chunk.slice(boundary + 1);
-          buffer = buffer.replace(/\\n/g, '<br>');
-          // console.log(buffer);
+          // buffer = buffer.replace(/\\n/g, '<br>');
+          console.log(buffer);
           // process.stdout.write(buffer);
           setOutput(buffer);
           boundary = chunk.indexOf("\n");
@@ -151,10 +164,11 @@ export default function Home() {
             <div className="flex-1 overflow-y-auto p-4">
               {error && <div className="mt-4 text-red-500">{error}</div>}
               {output && (
-                <>
+              <div className="markdown whitespace-pre-line" >
                   <div className="font-medium leading-6 text-lg text-gray-900 pb-2">回答：</div>
-                  <p className="mt-2 text-gray-700">{output}</p>
-                </>
+                  {/* <p className="mt-2 text-gray-700">{output}</p> */}
+                  <ReactMarkdown><MultiLineBody body={output} /></ReactMarkdown>
+                </div>
               )}
             </div>
 

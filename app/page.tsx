@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent,useRef  } from "react";
+import { BeakerIcon } from '@heroicons/react/24/solid'
 
 // メッセージ
 interface Message {
@@ -15,6 +16,8 @@ export default function Home() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const fileInputRef = useRef(null);
 
   // Streamのフェッチ
   async function fetchStream(messages: Message[]) {
@@ -48,6 +51,7 @@ export default function Home() {
         while (boundary !== -1) {
           buffer += chunk.slice(3, boundary-1);
           chunk = chunk.slice(boundary + 1);
+          buffer=buffer.replace(/\n/g,'<br>')
           setOutput(buffer);
           boundary = chunk.indexOf("\n");
         }
@@ -79,17 +83,7 @@ export default function Home() {
 
   return (
     <div className="mx-auto my-16 min-w-1/2 max-w-2xl px-4">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-        <button type="submit">Send</button>
-      </form>
-      <div>{output}</div>
-
-      <div className="bg-gray-700 rounded-md md:flex md:items-center md:justify-between py-4 px-4">
+      {/* <div className="bg-gray-700 rounded-md md:flex md:items-center md:justify-between py-4 px-4">
         <div className="min-w-0 flex-1">
           <h2 className="text-2xl font-bold leading-7 text-white">Next ChatBot</h2>
         </div>
@@ -130,9 +124,58 @@ export default function Home() {
                 <p className="mt-2 text-gray-700">{output}</p>
               </>
             )}
+      </div> */}
 
-        
-      </div>
+
+      
+
+       <div className="flex h-full w-full bg-white rounded-lg shadow-lg">
+
+          <div className="w-1/4 bg-gray-800 p-4 flex flex-col">
+            <h2 className="text-white text-lg mb-4">チャットリスト</h2>
+            <ul>
+              <li className="text-white">グループ 1</li>
+              <li className="text-white">グループ 2</li>
+            </ul>
+          </div>
+
+
+          <div className="flex-1 flex flex-col bg-gray-100">
+            <div className="flex-1 overflow-y-auto p-4">
+              {error && <div className="mt-4 text-red-500">{error}</div>}
+              {output && (
+                <>
+                  <div className="font-medium leading-6 text-lg text-gray-900 pb-2">回答：</div>
+                  <p className="mt-2 text-gray-700">{output}</p>
+                </>
+              )}
+            </div>
+
+
+            <form onSubmit={handleSubmit} className="p-4 flex items-center bg-white border-t border-gray-300">
+              <input
+                className="flex-1 p-2 border border-gray-300 rounded-lg"
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="メッセージを入力"
+              />
+              {/* <button type="button" onClick={() => fileInputRef.current.click()} className="ml-2">
+                <BeakerIcon className="h-6 w-6 text-gray-500" />
+              </button>
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                onChange={sendFile}
+              /> */}
+              <button className="ml-2 p-2 bg-blue-500 text-white rounded-lg" type="submit">
+                送信
+              </button>
+            </form>
+          </div>
+        </div>
+      
     </div>
   );
 }

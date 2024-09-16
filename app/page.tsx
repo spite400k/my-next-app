@@ -51,11 +51,16 @@ export default function Home() {
         while (boundary !== -1) {
           buffer += chunk.slice(3, boundary-1);
           chunk = chunk.slice(boundary + 1);
-          buffer=buffer.replace(/\n/g,'<br>')
+          buffer = buffer.replace(/\\n/g, '<br>');
+          // console.log(buffer);
+          // process.stdout.write(buffer);
           setOutput(buffer);
           boundary = chunk.indexOf("\n");
         }
       }
+
+      // console.log(output);
+      // process.stdout.write(output);
     } catch (e: any) {
       if (e.code === 'ECONNABORTED') {
         setError('タイムアウト: 15秒以内に回答が返ってきませんでした。');
@@ -76,6 +81,8 @@ export default function Home() {
     
     try {
       fetchStream([{ role: "user", content: input }]);
+      // console.log(output);
+      // process.stdout.write(output);
     } catch (error) {
       console.error("Error:", error);
     }

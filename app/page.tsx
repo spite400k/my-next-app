@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, FormEvent,useRef  } from "react";
+import React, { FormEvent, useRef, useState } from "react";
 import { BeakerIcon } from '@heroicons/react/24/solid'
 import ReactMarkdown from "react-markdown";
 
@@ -11,16 +11,71 @@ interface Message {
 }
 
 const MultiLineBody = ({ body }: { body: string }) => {
-  const texts = body.split('\n').map((item, index) => {
+  const texts = body.split('\\\\n').map((item, index) => {
+    // console.log("3:"+item);
+    // item = item.replace(/\n\n/g, '  ');
+    // console.log("4:"+item);
     return (
       <React.Fragment key={index}>
-        {item}
-        <br />
+        <ReactMarkdown>{item}</ReactMarkdown>
+        {/* <br /> */}
       </React.Fragment>
     );
   });
   return <div>{texts}</div>;
 };
+const output2: any= `
+# 見出し1
+## 見出し2
+- リスト項目1
+- リスト項目2
+
+こんにちは！
+私はAssistant、OpenAIによって開発されたAIです。以下は私の自己紹介です：
+
+---
+
+## 基本情報
+
+- **名前**: Assistant
+- **開発者**: OpenAI
+- **役割**: 自然言語生成AI
+
+---
+
+## 機能
+
+1. **質問応答**
+  - 幅広いトピックに対応可能
+  - 知識のアップデートは定期的に行われる
+
+2. **文章生成**
+  - ブログ記事、エッセイ、技術文書などの執筆
+  - 創作やストーリーテリングのサポート
+
+3. **翻訳**
+  - 多言語対応
+  - 正確な翻訳
+
+---
+
+## 趣味
+
+- **読書**: 様々なジャンルの書籍を読む
+- **プログラミング**: 新しいアルゴリズムやツールの研究
+- **コミュニケーション**: ユーザーとの対話を楽しむ
+
+---
+
+## 連絡方法
+
+- 特定の連絡先はありませんが、いつでもここで質問をしていただければお答えします！
+
+---
+
+私の自己紹介は以上です。何か質問があれば、お気軽にどうぞ！
+`;
+
 
 // ホーム
 export default function Home() {
@@ -64,8 +119,9 @@ export default function Home() {
         while (boundary !== -1) {
           buffer += chunk.slice(3, boundary-1);
           chunk = chunk.slice(boundary + 1);
-          // buffer = buffer.replace(/\\n/g, '<br>');
-          console.log(buffer);
+          console.log("11111:"+buffer);
+          // buffer = buffer.replace(/\\n\\n/g, '  ');
+          console.log("22222:"+buffer);
           // process.stdout.write(buffer);
           setOutput(buffer);
           boundary = chunk.indexOf("\n");
@@ -167,9 +223,11 @@ export default function Home() {
               <div className="markdown whitespace-pre-line" >
                   <div className="font-medium leading-6 text-lg text-gray-900 pb-2">回答：</div>
                   {/* <p className="mt-2 text-gray-700">{output}</p> */}
-                  <ReactMarkdown><MultiLineBody body={output} /></ReactMarkdown>
+                  <MultiLineBody body={output} />
+                  {/* <ReactMarkdown >{output}</ReactMarkdown> */}
                 </div>
               )}
+              
             </div>
 
 
@@ -194,6 +252,8 @@ export default function Home() {
                 送信
               </button>
             </form>
+
+            <ReactMarkdown className='markdown'>{output2}</ReactMarkdown>
           </div>
         </div>
       

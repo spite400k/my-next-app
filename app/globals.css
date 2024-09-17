@@ -2,10 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 .markdown {
-  @apply text-gray-900 leading-normal break-words whitespace-pre-wrap;
+  @apply text-gray-900 leading-normal break-words ;
+  
 }
 
 .markdown > * + * {

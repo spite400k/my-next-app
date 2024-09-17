@@ -11,9 +11,10 @@ interface Message {
 }
 
 const MultiLineBody = ({ body }: { body: string }) => {
-  const texts = body.split('\\\\n').map((item, index) => {
-    // console.log("3:"+item);
-    // item = item.replace(/\n\n/g, '  ');
+  // body = body.replace(/\\n/g, '\n');
+  const texts = body.split('\\n\\n').map((item, index) => {
+    console.log(item);
+    item = item.replace(/\\n/g, '\n');
     // console.log("4:"+item);
     return (
       <React.Fragment key={index}>
@@ -25,11 +26,6 @@ const MultiLineBody = ({ body }: { body: string }) => {
   return <div>{texts}</div>;
 };
 const output2: any= `
-# 見出し1
-## 見出し2
-- リスト項目1
-- リスト項目2
-
 こんにちは！
 私はAssistant、OpenAIによって開発されたAIです。以下は私の自己紹介です：
 
@@ -120,8 +116,8 @@ export default function Home() {
           buffer += chunk.slice(3, boundary-1);
           chunk = chunk.slice(boundary + 1);
           console.log("11111:"+buffer);
-          // buffer = buffer.replace(/\\n\\n/g, '  ');
-          console.log("22222:"+buffer);
+          // buffer = buffer.replace(/\\n\\n/g, '\\n');
+          // console.log("22222:"+buffer);
           // process.stdout.write(buffer);
           setOutput(buffer);
           boundary = chunk.indexOf("\n");
@@ -220,7 +216,7 @@ export default function Home() {
             <div className="flex-1 overflow-y-auto p-4">
               {error && <div className="mt-4 text-red-500">{error}</div>}
               {output && (
-              <div className="markdown whitespace-pre-line" >
+              <div className="markdown" >
                   <div className="font-medium leading-6 text-lg text-gray-900 pb-2">回答：</div>
                   {/* <p className="mt-2 text-gray-700">{output}</p> */}
                   <MultiLineBody body={output} />

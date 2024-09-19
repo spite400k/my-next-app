@@ -3,7 +3,7 @@ import React from 'react'
 import { useRecoilState } from 'recoil';
 import { chatLogState } from '../state/chatLogState';
 import ReactMarkdown from 'react-markdown';
-import styles from './css/chat.module.css'
+import remarkGfm from 'remark-gfm';
 
 type MessageType = {
   id: number;
@@ -17,7 +17,7 @@ const MultiLineBody = ({ body }: { body: string }) => {
     item = item.replace(/\\n/g, '\n');
     return (
       <React.Fragment key={index}>
-        <ReactMarkdown>{item}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{item}</ReactMarkdown>
       </React.Fragment>
     );
   });
@@ -32,14 +32,15 @@ const ChatMessage = () => {
         return (
           <div 
 	    key={message.id} 
-	    className={`flex items-end ${message.sender === 'user' ? 'justify-end' : ''} styles.chat__icon`}>
+	    className={`mb-2 p-2 rounded-lg ${
+              message.sender === 'user' ? 'flex bg-blue-300 text-white self-end' : 'flex bg-gray-300 self-start' }`}>
             {message.sender === 'other' && (
               <div className="flex-shrink-0 mr-2">
-                <div className="h-8 w-8 bg-gray-300 rounded-full" /> {/* アイコンの代わり */}
+                <div className="h-8 w-8 bg-black rounded-full" /> {/* アイコンの代わり */}
               </div>
             )}
             <div 
-	     className={`rounded p-2 ${message.sender === 'user' ? 'bg-blue-200' : 'bg-gray-500'} styles.chat__text`}>
+	     className={`rounded p-2`}>
               <p className="text-sm markdown">
                 {/* {message.content} */}
                 <MultiLineBody body={message.content} />

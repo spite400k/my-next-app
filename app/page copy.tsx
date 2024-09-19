@@ -2,7 +2,6 @@
 
 import React, { FormEvent, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import ChatClient from "./components/ChatClient";
 
 // メッセージ
 interface Message {
@@ -98,14 +97,41 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      {/* <!-- チャットヘッダー --> */}
-      <div className="p-3 bg-gray-800 text-white">
-        <h1 className="text-lg">チャットルーム</h1>
-      </div>
-      
-      <ChatClient />
-      
+    <div className="mx-auto my-16 min-w-1/2 max-w-2xl px-4">
+       <div className="flex h-full w-full bg-white rounded-lg shadow-lg">
+          <div className="w-1/4 bg-gray-800 p-4 flex flex-col">
+            <h2 className="text-white text-lg mb-4">チャットリスト</h2>
+            <ul>
+              <li className="text-white">グループ 1</li>
+              <li className="text-white">グループ 2</li>
+            </ul>
+          </div>
+          <div className="flex-1 flex flex-col bg-gray-100">
+            <div className="flex-1 overflow-y-auto p-4">
+              {error && <div className="mt-4 text-red-500">{error}</div>}
+              {output && (
+              <div className="markdown" >
+                  <div className="font-medium leading-6 text-lg text-gray-900 pb-2">回答：</div>
+                  <MultiLineBody body={output} />
+                </div>
+              )}
+              
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-4 flex items-center bg-white border-t border-gray-300">
+              <input
+                className="flex-1 p-2 border border-gray-300 rounded-lg"
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="メッセージを入力"
+              />
+              <button className="ml-2 p-2 bg-blue-500 text-white rounded-lg" type="submit">
+                送信
+              </button>
+            </form>
+          </div>
+        </div>
     </div>
   );
 }

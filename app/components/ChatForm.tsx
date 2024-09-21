@@ -2,14 +2,21 @@
 import React, { useState } from 'react'
 import { useRecoilState, useResetRecoilState } from 'recoil'
 import { chatLogState } from '../state/chatLogState'
+import { loadingState } from '../state/loadingState'
 
 const ChatForm = () => {
 
   const [input, setInput] = useState<string>("")
   const [chatLog, setChatLog] = useRecoilState(chatLogState)
 
+  const [isLoading, setIsLoading] = useRecoilState(loadingState);
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setIsLoading({ bool: true});
+
     const newId = chatLog.length > 0 ? chatLog[chatLog.length - 1].id + 1 : 1;
 
     const newUserMessage = { id: newId, content: input, sender: "user" };
@@ -36,6 +43,8 @@ const ChatForm = () => {
       setChatLog([...updatedMessages, newGptMessage]);
     } catch (error) {
       console.error('Error fetching GPT response:', error);
+    } finally {
+      setIsLoading({ bool: false});
     }
     
   };

@@ -5,6 +5,9 @@ import { chatLogState } from '../state/chatLogState';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { loadingState } from '../state/loadingState';
+import AnchorTag from './atoms/AnchorTag';
+import CodeBlock from './atoms/CodeBlock';
+
 
 type MessageType = {
   id: number;
@@ -18,7 +21,12 @@ const MultiLineBody = ({ body }: { body: string }) => {
     item = item.replace(/\\n/g, '\n');
     return (
       <React.Fragment key={index}>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{item}</ReactMarkdown>
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm]}
+              components={{
+                a: AnchorTag,
+                code: CodeBlock,              }}
+            >{item}</ReactMarkdown>
       </React.Fragment>
     );
   });
@@ -35,7 +43,7 @@ const ChatMessage = () => {
           <>
             <div key={message.id} 
                   className={`mb-2 p-2 rounded-lg max-w-2xl ${
-                    message.sender === 'user' ? 'flex bg-blue-300 text-white self-end' : 'flex bg-gray-300 self-start' }`}>
+                    message.sender === 'user' ? 'flex bg-blue-300 text-white self-end' : 'flex self-start' }`}>
               
               {message.sender === 'other' && (
                 <div className="flex-shrink-0 mr-2">

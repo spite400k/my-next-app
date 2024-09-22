@@ -15,6 +15,21 @@ const ChatForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    doSubmit();
+  };
+  const handleKeydown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    //e.preventDefault();
+
+    if(e.key !== 'Enter') {
+      return;
+    }
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      doSubmit();
+    }
+  };
+
+  const doSubmit=async ()=>{
+
     // 未入力の場合は何もしない
     if (input.length <= 0 ) return;
 
@@ -49,8 +64,7 @@ const ChatForm = () => {
     } finally {
       setIsLoading({ bool: false});
     }
-    
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit} className="p-3 bg-gray-200 flex justify-between items-center">
@@ -69,16 +83,9 @@ const ChatForm = () => {
           
               setInput(e.target.value)
         }}
-        onKeyDown={(e) => {
-          if(e.key !== 'Enter') {
-            return;
-          }
-          if(e.shiftKey) {
-              return;
-          }
-        }}
+        onKeyDown={(e)=>handleKeydown(e)} 
         className="w-full p-2 mr-2 rounded focus:outline-none text-gray-800" 
-        placeholder="メッセージを入力..."
+        placeholder="メッセージを入力...  ctrl+Enterでも送信できます"
       />
       <button disabled={isLoading.bool} type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         送信

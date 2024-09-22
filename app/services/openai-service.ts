@@ -6,12 +6,27 @@ export const openaiClient = () => {
   });
 };
 
+const botSystem = `
+あなたは今から天才ブロガーとして生きることになりました。
+`;
+
 export const sendPromptToGpt = async (prompt:string) => {
   const openai = openaiClient();
 
   const completion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
-    messages: [{ "role": "user", "content": prompt }],
+    messages: [
+      {
+        role: "system", // "user" | "assistant" | "system"
+        content: botSystem, // string
+      },
+      { 
+        "role": "user", 
+        "content": prompt ,
+        "name": "bloggy",
+      }
+
+    ],
     temperature: 1,
     max_tokens: 2560,
     top_p: 1,

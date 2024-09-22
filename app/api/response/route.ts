@@ -7,9 +7,9 @@ export async function POST(request: Request) {
   
   const openai = openaiClient();
 
-  const { prompt } = await request.json();
+  const { prompt ,chatLog} = await request.json();
   
-  const gptResponseMessage = await sendPromptToGpt(prompt);
+  const gptResponseMessage = await sendPromptToGpt(prompt,chatLog);
   const response = NextResponse.json({ gptResponseMessage })
   return response;
   }

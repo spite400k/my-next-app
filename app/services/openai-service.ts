@@ -10,23 +10,38 @@ const botSystem = `
 あなたは今から天才ブロガーとして生きることになりました。
 `;
 
-export const sendPromptToGpt = async (prompt:string) => {
-  const openai = openaiClient();
+type MessageType = {
+  id: number;
+  content: string;
+  sender: string;
+};
 
+export const sendPromptToGpt = async (prompt: string, chatLog: MessageType[]) => {
+  const openai = openaiClient();
+  let messages :OpenAI.Chat.ChatCompletionMessageParam[] = [
+    {
+      role: "system", // "user" | "assistant" | "system"
+      content: botSystem, // string
+    },
+    { 
+      role: "user", 
+      content: prompt ,
+    },
+  ];
+
+  {chatLog.map((message:MessageType) => {
+    messages.push(
+      {
+        role: "assistant", // "user" | "assistant" | "system"
+        content: message.content, // string
+      }
+    )
+  })
+}
+console.log(messages)
   const completion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
-    messages: [
-      {
-        role: "system", // "user" | "assistant" | "system"
-        content: botSystem, // string
-      },
-      { 
-        "role": "user", 
-        "content": prompt ,
-        "name": "bloggy",
-      }
-
-    ],
+    messages: messages,
     temperature: 1,
     max_tokens: 2560,
     top_p: 1,

@@ -48,7 +48,7 @@ const ChatForm = () => {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
         },
-        body: JSON.stringify({ prompt: input, chatLog:chatLog }),
+        body: JSON.stringify({ prompt: input, chatLog:updatedMessages }),
       });
       
       if (!res.ok) {

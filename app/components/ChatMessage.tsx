@@ -75,52 +75,52 @@ const ChatMessage = () => {
         ref={chatContainerRef}  
         onScroll={handleScroll}
       >
-      {chatLog.map((message:MessageType) => {
-        return (
-            <div key={message.id} 
-                  className={`mb-2 p-2 rounded-lg max-w-2xl ${
-                    message.sender === 'user' ? 'flex bg-blue-300 text-white self-end' : 'flex self-start' }`}>
-              
-                {message.sender === 'other' && (
-                  <div className="flex-shrink-0 mr-2">
-                    <div className="h-8 w-8 bg-black rounded-full" /> {/* アイコンの代わり */}
-                  </div>
-                )}
-                <div  className={`rounded p-2`}>
-                  <div className={`text-sm markdown  ${
-                      message.sender === 'user' ? 'whitespace-pre' : '' }`}>
-                    {/* {message.content} */}
-                    <MultiLineBody body={message.content} />
-                  </div>
+        {chatLog.map((message:MessageType) => {
+          return (
+              <div key={message.id} 
+                    className={`mb-2 p-2 rounded-lg max-w-2xl ${
+                      message.sender === 'user' ? 'flex bg-blue-300 text-white self-end' : 'flex self-start' }`}>
+                
+                  {message.sender === 'other' && (
+                    <div className="flex-shrink-0 mr-2">
+                      <div className="h-8 w-8 bg-black rounded-full" /> {/* アイコンの代わり */}
+                    </div>
+                  )}
+                  <div  className={`rounded p-2`}>
+                    <div className={`text-sm markdown  ${
+                        message.sender === 'user' ? 'whitespace-pre' : '' }`}>
+                      {/* {message.content} */}
+                      <MultiLineBody body={message.content} />
+                    </div>
+                </div>
+
               </div>
+          )
+        })}
 
+        {isLoading.bool ? (
+          <div className="mb-2 p-2 rounded-lg max-w-2xl flex self-start">  
+            <div className="flex-shrink-0 mr-2">
+              <div className="h-8 w-8 bg-black rounded-full" /> {/* アイコンの代わり */}
             </div>
-        )
-      })}
+            <div className="flex justify-start p-2" aria-label="読み込み中">
+              <div className="font-medium leading-6 text-lg text-indigo-700 pb-2 pr-3">読み込み中</div>
+              <div className="flex justify-center items-center pb-2">
+                <div className="animate-ping h-2 w-2 bg-blue-600 rounded-full"></div>
+                <div className="animate-ping h-2 w-2 bg-blue-600 rounded-full mx-4"></div>
+                <div className="animate-ping h-2 w-2 bg-blue-600 rounded-full"></div>
+              </div>
+            </div>        
 
-      {isLoading.bool ? (
-        <div className="mb-2 p-2 rounded-lg max-w-2xl flex self-start">  
-          <div className="flex-shrink-0 mr-2">
-            <div className="h-8 w-8 bg-black rounded-full" /> {/* アイコンの代わり */}
           </div>
-          <div className="flex justify-start p-2" aria-label="読み込み中">
-            <div className="font-medium leading-6 text-lg text-indigo-700 pb-2 pr-3">読み込み中</div>
-            <div className="flex justify-center items-center pb-2">
-              <div className="animate-ping h-2 w-2 bg-blue-600 rounded-full"></div>
-              <div className="animate-ping h-2 w-2 bg-blue-600 rounded-full mx-4"></div>
-              <div className="animate-ping h-2 w-2 bg-blue-600 rounded-full"></div>
-            </div>
-          </div>        
-
-        </div>
-       ) : (
-        <></>
-        )} 
+        ) : (
+          <></>
+        )}
+        
+        {/* スクロールのターゲット */}
+        <div ref={messageEndRef} className="" />
       </div>
 
-       
-      {/* スクロールのターゲット */}
-      <div ref={messageEndRef} className=""/>
       {/* スクロールダウンボタン（必要なときのみ表示） */}
       {isScrolled && (
         <div className="absolute bottom-1/4 left-2/4">

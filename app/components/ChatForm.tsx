@@ -59,6 +59,9 @@ const ChatForm = () => {
       const newGptId = newId + 1;
       const newGptMessage = { id: newGptId, content: result.gptResponseMessage, sender: "other" };
       setChatLog([...updatedMessages, newGptMessage]);
+
+
+
     } catch (error) {
       console.error('Error fetching GPT response:', error);
     } finally {
@@ -67,7 +70,7 @@ const ChatForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="absolute bottom-0 w-full p-3 bg-gray-200 flex justify-between items-center">
+    <form onSubmit={handleSubmit} className=" bottom-0 w-full p-3 bg-gray-200 flex justify-between items-center">
       <textarea
         // type="text"
         value={input}

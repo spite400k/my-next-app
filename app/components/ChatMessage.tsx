@@ -94,7 +94,7 @@ const ChatMessage = () => {
   return (
     <>
       <div
-        className="flex flex-col flex-grow scrollbar ${isScrolling ? 'scrollbar-visible' : 'scrollbar-hidden'}"
+        className="flex flex-col flex-grow overflow-y-auto scrollbar ${isScrolling ? 'scrollbar-visible' : 'scrollbar-hidden'}"
         ref={chatContainerRef}  
         onScroll={handleScroll}
       >

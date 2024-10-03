@@ -67,7 +67,7 @@ const ChatForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="p-3 bg-gray-200 flex justify-between items-center">
+    <form onSubmit={handleSubmit} className="absolute bottom-0 w-full p-3 bg-gray-200 flex justify-between items-center">
       <textarea
         // type="text"
         value={input}

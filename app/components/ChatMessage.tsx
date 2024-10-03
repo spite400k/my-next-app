@@ -67,18 +67,41 @@ const ChatMessage = () => {
   };
 
 
+  // スクロールバーを自動で非表示
+  const [isScrolling, setIsScrolling] = useState<boolean>(false);
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const handleScroll = () => {
+      clearTimeout(timeoutId);
+      setIsScrolling(true);
+
+      // スクロールが止まってから2秒後にスクロールバーを消す
+      timeoutId = setTimeout(() => {
+        setIsScrolling(false);
+      }, 2000);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
   return (
     <>
       <div
-        className="flex flex-col flex-grow overflow-y-auto bg-white rounded-lg shadow p-4 mb-4"
+        className="flex flex-col flex-grow scrollbar ${isScrolling ? 'scrollbar-visible' : 'scrollbar-hidden'}"
         ref={chatContainerRef}  
         onScroll={handleScroll}
       >
         {chatLog.map((message:MessageType) => {
           return (
               <div key={message.id} 
-                    className={`mb-2 p-2 rounded-lg max-w-2xl ${
+                    className={`mb-2 p-2 rounded-lg sm:max-w-2xl ${
                       message.sender === 'user' ? 'flex bg-blue-300 text-white self-end' : 'flex self-start' }`}>
                 
                   {message.sender === 'other' && (
@@ -86,7 +109,7 @@ const ChatMessage = () => {
                       <div className="h-8 w-8 bg-black rounded-full" /> {/* アイコンの代わり */}
                     </div>
                   )}
-                  <div  className={`rounded p-2`}>
+                  <div  className="rounded p-2">
                     <div className={`text-sm markdown  ${
                         message.sender === 'user' ? 'whitespace-pre' : '' }`}>
                       {/* {message.content} */}

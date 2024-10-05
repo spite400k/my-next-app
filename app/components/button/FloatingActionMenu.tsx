@@ -1,34 +1,36 @@
+import { chatInputState } from '@/app/state/chatInputState';
 import React, { useState } from 'react';
 import { FaPlus, FaEdit, FaTrash, FaShare } from 'react-icons/fa';
+import { FaHandPointLeft } from 'react-icons/fa6';
+import { useRecoilState } from 'recoil';
 
 type MenuItem = {
   id: number;
   icon: JSX.Element;
   bgColor: string;
-  action: () => void;
-  value: string;
+  action: (word : string) => void;
+  menuName: string;
+  prompt: string;
 };
 
 const FloatingActionMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [chatInput, setChatInput] = useRecoilState(chatInputState)
 
   const toggleMenu = () => {
     setIsOpen(!isOpen); // メニューの表示/非表示をトグルする
   };
 
-  const handleEdit = () => alert('編集がクリックされました！');
-  const handleDelete = () => alert('削除がクリックされました！');
-  const handleShare = () => alert('共有がクリックされました！');
+  const handleMenuClick = (word : string) => setChatInput({content: word});
 
   // メニューアイテムの配列
   const menuItems: MenuItem[] = [
-    { id: 1, icon: <FaEdit />, bgColor: 'bg-gray-800 hover:bg-gray-700', action: handleEdit ,value:'関連するキーワードを探す　'},
-    { id: 2, icon: <FaTrash />, bgColor: 'bg-red-500 hover:bg-red-400', action: handleDelete ,value:'キーワードの「検索意図」を表にする　'},
-    { id: 3, icon: <FaShare />, bgColor: 'bg-green-500 hover:bg-green-400', action: handleShare, value: 'キーワード戦略を調査する　' },
-    { id: 4, icon: <FaShare />, bgColor: 'bg-green-600 hover:bg-green-500', action: handleShare, value: '検索ボリュームと難易度を指定する　' },
-    { id: 5, icon: <FaShare />, bgColor: 'bg-green-700 hover:bg-green-600', action: handleShare, value: 'ロングテールキーワードを提案させる　' },
-    { id: 6, icon: <FaShare />, bgColor: 'bg-green-800 hover:bg-green-700', action: handleShare, value: 'キーワードからトピックをリスト化させる　' },
-                
+    { id: 1, icon: <FaHandPointLeft />, bgColor: 'bg-gray-800  hover:bg-gray-700',    action: (word : string) => handleMenuClick(word) , menuName:'関連するキーワードを探す　' , prompt : "次のワードに関連するSEOキーワードを10個特定してください。"},
+    { id: 2, icon: <FaHandPointLeft />, bgColor: 'bg-red-500   hover:bg-red-400',     action: (word : string) => handleMenuClick(word) , menuName:'キーワードの「検索意図」を表にする　', prompt : "次のワードの検索意図（Buyクエリ、Knowクエリ、Doクエリ、Goクエリ）を表に分類してください。"},
+    { id: 3, icon: <FaHandPointLeft />, bgColor: 'bg-green-500 hover:bg-green-400',   action: (word : string) => handleMenuClick(word) , menuName:'キーワード戦略を調査する　' , prompt : "次のワードの上位5つのSEOキーワード戦略を調査してください。"},
+    { id: 4, icon: <FaHandPointLeft />, bgColor: 'bg-blue-600 hover:bg-blue-500',     action: (word : string) => handleMenuClick(word) , menuName:'検索ボリュームと難易度を指定する　' , prompt : "あなたが SEOリーダーであると仮定します。次のワードについて、検索ボリュームが多く、難易度は低いキーワードをいくつか提案してください。"},
+    { id: 5, icon: <FaHandPointLeft />, bgColor: 'bg-yellow-700 hover:bg-yellow-600', action: (word : string) => handleMenuClick(word) , menuName:'ロングテールキーワードを提案させる　' , prompt : "あなたがコンテンツマーケターと仮定します。次のワードに関連するロングテールで高ボリューム、低難度のキーワードを提供してください。"},
+    { id: 6, icon: <FaHandPointLeft />, bgColor: 'bg-slate-800 hover:bg-slate-700',   action: (word : string) => handleMenuClick(word) , menuName:'キーワードからトピックをリスト化させる　' , prompt : "あなたがオンラインマーケティングマネージャーと仮定します。次のワードに関連する広範なトピックのリストを作成し、各トピックを顧客が使用すると思われるフレーズのリストで展開してください。"},
   ];
 
   return (
@@ -56,7 +58,7 @@ const FloatingActionMenu: React.FC = () => {
             {menuItems.map((item) => (
               <li key={item.id} className='flex gap-1 mb-2'>
                 <button
-                  onClick={item.action}
+                  onClick={() => item.action(item.prompt)}
                   className={`
                     w-12 h-12 ${item.bgColor} text-white rounded-full
                     flex items-center justify-center shadow-lg focus:outline-none
@@ -65,7 +67,7 @@ const FloatingActionMenu: React.FC = () => {
                 >
                   {item.icon}
                 </button>
-                <div className='my-auto pl-3 rounded'>{item.id} . {item.value}</div>
+                <div className='my-auto pl-3 rounded'>{item.id} . {item.menuName}</div>
               </li>
             ))}
             <div className="absolute bottom-[-16px] right-0 transform -translate-x-1/2 w-0 h-0 

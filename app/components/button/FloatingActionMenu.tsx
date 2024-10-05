@@ -42,7 +42,11 @@ const FloatingActionMenu: React.FC = () => {
           focus:outline-none 
         "
       >
-        <FaPlus className="text-xl" />
+        <FaPlus
+          className={`text-xl transform transition-transform duration-300 ${
+            isOpen ? 'rotate-45' : ''
+          }`}
+        />
       </button>
 
       {/* メニューリストを map で表示 */}

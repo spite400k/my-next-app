@@ -10,7 +10,7 @@ const ChatClient = () => {
   return (
     <RecoilRoot >
         {/* <!-- メッセージエリア --> */}
-        <div className="mx-auto w-full flex flex-col max-h-fit overflow-hidden bg-white rounded-lg shadow p-1 mb-2 gap-4 lg:gap-6">
+        <div className="mx-auto w-full flex flex-col  h-screen overflow-hidden bg-white rounded-lg shadow p-1 mb-2 gap-4 lg:gap-6">
           <ChatMessage />
         </div>
 

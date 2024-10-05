@@ -92,14 +92,11 @@ const ChatMessage = () => {
     };
   }, []);
 
-  const handleClick = () => {
-    alert('フローティングアクションボタンがクリックされました！');
-  };
 
   return (
     <>
       <div
-        className="flex flex-col flex-grow overflow-y-auto scrollbar ${isScrolling ? 'scrollbar-visible' : 'scrollbar-hidden'}"
+        className="flex flex-col overflow-y-auto"
         ref={chatContainerRef}  
         onScroll={handleScroll}
       >
@@ -147,6 +144,8 @@ const ChatMessage = () => {
         
         {/* スクロールのターゲット */}
         <div ref={messageEndRef} className="" />
+        {/* フローティングアクションボタン */}
+        <FloatingActionMenu />
       </div>
 
       {/* スクロールダウンボタン（必要なときのみ表示） */}
@@ -161,8 +160,7 @@ const ChatMessage = () => {
         </div>
       )}
 
-      {/* フローティングアクションボタン */}
-      <FloatingActionMenu />
+
 
     </>
   )

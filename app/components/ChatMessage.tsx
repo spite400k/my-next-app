@@ -8,6 +8,7 @@ import { loadingState } from '../state/loadingState';
 import AnchorTag from './atoms/AnchorTag';
 import CodeBlock from './atoms/CodeBlock';
 import styles from './css/scrolldown.module.css'
+import FloatingActionMenu from './button/FloatingActionMenu';
 
 
 type MessageType = {
@@ -91,6 +92,10 @@ const ChatMessage = () => {
     };
   }, []);
 
+  const handleClick = () => {
+    alert('フローティングアクションボタンがクリックされました！');
+  };
+
   return (
     <>
       <div
@@ -155,6 +160,10 @@ const ChatMessage = () => {
           </button>
         </div>
       )}
+
+      {/* フローティングアクションボタン */}
+      <FloatingActionMenu />
+
     </>
   )
 }

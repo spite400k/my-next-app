@@ -1,12 +1,14 @@
 'use client'
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useRecoilState, useResetRecoilState } from 'recoil'
 import { chatLogState } from '../state/chatLogState'
 import { loadingState } from '../state/loadingState'
+import { chatInputState } from '../state/chatInputState'
 
 const ChatForm = () => {
 
-  const [input, setInput] = useState<string>("")
+  // const [input, setInput] = useState<string>("")
+  const [chatInput, setChatInput] = useRecoilState(chatInputState)
   const [chatLog, setChatLog] = useRecoilState(chatLogState)
 
   const [isLoading, setIsLoading] = useRecoilState(loadingState);
@@ -34,28 +36,28 @@ const ChatForm = () => {
   const doSubmit=async ()=>{
 
     // 未入力の場合は何もしない
-    if (input.length <= 0 ) return;
+    if (chatInput.content.length <= 0 ) return;
 
     setIsLoading({ bool: true});
 
     const newId = chatLog.length > 0 ? chatLog[chatLog.length - 1].id + 1 : 1;
 
-    const newUserMessage = { id: newId, content: input, sender: "user" };
+    const newUserMessage = { id: newId, content: chatInput.content, sender: "user" };
     const updatedMessages = [...chatLog, newUserMessage];
     setChatLog(updatedMessages);
-    setInput("");
+    setChatInput({content: ""});
     // テキストエリアの高さを元に戻す
     if (textareaRef.current) {
         textareaRef.current.style.height = "auto"; // 高さをリセット
     }
-    
+
     try {
       const res = await fetch(`/api/response`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
         },
-        body: JSON.stringify({ prompt: input, chatLog:updatedMessages }),
+        body: JSON.stringify({ prompt: chatInput.content, chatLog:updatedMessages }),
       });
       
       if (!res.ok) {
@@ -96,8 +98,8 @@ const ChatForm = () => {
     <form onSubmit={handleSubmit} className=" bottom-0 w-full p-3 bg-gray-200 flex justify-between items-center">
       <textarea
         // type="text"
-        value={input}
-        onChange={(e) => {setInput(e.target.value) }}
+        value={chatInput.content}
+        onChange={(e) => { setChatInput({ content: e.target.value }) }}
         onInput={handleInput}
         onKeyDown={(e)=>handleKeydown(e)} 
         className="w-full p-2 mr-2 rounded focus:outline-none text-gray-800" 

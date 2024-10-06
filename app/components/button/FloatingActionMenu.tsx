@@ -34,7 +34,7 @@ const FloatingActionMenu: React.FC = () => {
   ];
 
   return (
-    <div className="fixed bottom-24 right-3">
+    <div className="fixed bottom-28  right-7 ">
       {/* フローティングアクションボタン */}
       <button
         onClick={toggleMenu}

@@ -9,7 +9,9 @@ import AnchorTag from './atoms/AnchorTag';
 import CodeBlock from './atoms/CodeBlock';
 import styles from './css/scrolldown.module.css'
 import FloatingActionMenu from './button/FloatingActionMenu';
+import FloatingActionMenuAccordion from './button/FloatingActionMenuAccordion';
 
+import FloatingActionMenuAccordion2 from './button/FloatingActionMenuAccordion2';
 
 type MessageType = {
   id: number;
@@ -145,7 +147,9 @@ const ChatMessage = () => {
         {/* スクロールのターゲット */}
         <div ref={messageEndRef} className="" />
         {/* フローティングアクションボタン */}
-        <FloatingActionMenu />
+        {/* <FloatingActionMenu /> */}
+        {/* <FloatingActionMenuAccordion/> */}
+        <FloatingActionMenuAccordion2/>
       </div>
 
       {/* スクロールダウンボタン（必要なときのみ表示） */}

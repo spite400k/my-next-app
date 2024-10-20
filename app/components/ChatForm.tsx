@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useRecoilState, useResetRecoilState } from 'recoil'
 import { chatLogState } from '../state/chatLogState'
 import { loadingState } from '../state/loadingState'
@@ -15,6 +15,8 @@ const ChatForm = () => {
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null); // テキストエリアの参照を管理
 
+  const defaultHeight  = 90;
+  const [height, setHeight] = useState(defaultHeight); // テキストエリアの初期高さ
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -79,36 +81,89 @@ const ChatForm = () => {
 
 
   }
+  const [isExpanded, setIsExpanded] = useState(false); 
 
-    const handleInput = () => {
-    // テキストエリアの高さを動的に調整する（自動リサイズ）
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto"; // リセット
-      // textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // 内容に応じて高さを調整
-      // 改行に合わせて高さを変える
-      if(textareaRef.current.scrollHeight < 300){
-        textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
-      }else{
-        textareaRef.current.style.height = 300 + 'px';
+  const handleDisplayAll = () => {
+
+    if (isExpanded) {
+      setHeight(defaultHeight);
+      setIsExpanded(false);
+    } else {
+      // テキストエリアの高さを動的に調整する（自動リサイズ）
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "auto"; // リセット
+        // textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // 内容に応じて高さを調整
+        // 改行に合わせて高さを変える
+        if (textareaRef.current.scrollHeight < 600) {
+          // textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+          setHeight(textareaRef.current.scrollHeight);
+        } else {
+          // textareaRef.current.style.height = 600 + 'px';
+          setHeight(600);
+        }
       }
+      setIsExpanded(true);
     }
+
+  };
+
+
+  const isResizing = useRef(false);
+  const startResizing = (e: React.MouseEvent) => {
+    e.preventDefault();
+    isResizing.current = true;
+    setIsExpanded(true);
+
+    const initialY = e.clientY;
+    const initialHeight = height;
+
+    const resizeTextarea = (moveEvent: MouseEvent) => {
+      if (isResizing.current) {
+        const newHeight = initialHeight - (moveEvent.clientY - initialY);
+        if (newHeight > 50) { // 最小高さを50pxに設定
+          setHeight(newHeight);
+        }
+      }
+    };
+
+    const stopResizing = () => {
+      isResizing.current = false;
+      window.removeEventListener('mousemove', resizeTextarea);
+      window.removeEventListener('mouseup', stopResizing);
+    };
+
+    window.addEventListener('mousemove', resizeTextarea);
+    window.addEventListener('mouseup', stopResizing);
   };
 
   return (
-    <form onSubmit={handleSubmit} className=" bottom-0 w-full p-3 bg-gray-200 flex justify-between items-center">
+    <form onSubmit={handleSubmit} className="relative bottom-0 w-full p-3 bg-gray-200 flex justify-between items-center">
+      {/* 上部リサイズハンドル */}
+      <div
+        className="absolute top-0 left-0 w-full h-1 cursor-ns-resize bg-gray-300"
+        onMouseDown={startResizing}
+      />
       <textarea
         // type="text"
         value={chatInput.content}
         onChange={(e) => { setChatInput({ content: e.target.value }) }}
-        onInput={handleInput}
+        // onInput={handleInput}
         onKeyDown={(e)=>handleKeydown(e)} 
-        className="w-full p-2 mr-2 rounded focus:outline-none text-gray-800" 
+        className="w-full p-2 mr-2 rounded focus:outline-none text-gray-800 resize-none" 
         placeholder="メッセージを入力...  ctrl+Enterでも送信できます"
         ref={textareaRef}
+        style={{ height: `${height}px` }}
       />
-      <button disabled={isLoading.bool} type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        送信
-      </button>
+      <div className='flex'>
+        <div className="m-auto mr-3 bg-blue-200 hover:bg-blue-300 text-white font-bold py-2 px-2 rounded w-24"
+          onClick={handleDisplayAll}>
+          全部表示
+        </div>
+        <button disabled={isLoading.bool} type="submit" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-24">
+          送信
+        </button>
+      </div>
+
     </form>
   )
 }

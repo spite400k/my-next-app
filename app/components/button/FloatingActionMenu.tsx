@@ -54,7 +54,7 @@ const FloatingActionMenu: React.FC = () => {
       id: 1, icon: <FaHandPointLeft />, bgColor: 'bg-gray-800  hover:bg-gray-700',
       action: (word: string) => handleMenuOpen(word),
       menuName: 'SEOキーワード抽出　',
-      subItems: subMenuItems
+      subItems: []
     },
     {
       id: 2, icon: <FaHandPointLeft />, bgColor: 'bg-red-500   hover:bg-red-400',

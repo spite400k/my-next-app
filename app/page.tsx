@@ -3,6 +3,8 @@
 import React, { FormEvent, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import ChatClient from "./components/ChatClient";
+import Header from "./components/Header";
+import Sidebar from "./components/SideBar";
 
 // メッセージ
 interface Message {
@@ -98,14 +100,13 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col  min-h-screen">
       {/* <!-- チャットヘッダー --> */}
-      <div className="p-3 bg-gray-800 text-white">
-        <h1 className="text-lg">チャットルーム</h1>
+      <Header />
+      <div className="flex flex-grow">
+        <Sidebar />
+        <ChatClient />
       </div>
-      
-      <ChatClient />
-      
     </div>
   );
 }

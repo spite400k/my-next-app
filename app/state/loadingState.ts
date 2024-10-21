@@ -1,4 +1,5 @@
 // states/chatLogState.ts
+// OpenAiAPIのレスポンスが帰ってくるまでのローディング状態を保持
 import { atom } from 'recoil';
 
 export interface isLoading{

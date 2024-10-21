@@ -8,9 +8,6 @@ import { loadingState } from '../state/loadingState';
 import AnchorTag from './atoms/AnchorTag';
 import CodeBlock from './atoms/CodeBlock';
 import styles from './css/scrolldown.module.css'
-import FloatingActionMenu from './button/FloatingActionMenu';
-import FloatingActionMenuAccordion from './button/FloatingActionMenuAccordion';
-
 import FloatingActionMenuAccordion2 from './button/FloatingActionMenuAccordion2';
 
 type MessageType = {
@@ -19,10 +16,15 @@ type MessageType = {
   sender: string;
 };
 
+// マルチラインのメッセージを表示するコンポーネント
 const MultiLineBody = ({ body }: { body: string }) => {
+  // マルチラインのメッセージを改行で分割して表示
   const texts = body.split('\\n\\n').map((item, index) => {
     console.log(item);
+
+    // マークダウンの改行コードを変換
     item = item.replace(/\\n/g, '\n');
+    // マークダウンのリンクを変換
     return (
       <React.Fragment key={index}>
             <ReactMarkdown 
@@ -37,17 +39,22 @@ const MultiLineBody = ({ body }: { body: string }) => {
   return <div>{texts}</div>;
 };
 
-
+// チャットメッセージを表示するコンポーネント
 const ChatMessage = () => {
+  // チャットログを管理
   const [chatLog, setChatLog] = useRecoilState(chatLogState)
+  // ローディング状態を管理
   const isLoading = useRecoilValue(loadingState);
-
+  // スクロール位置を管理
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  // メッセージの末尾を参照するためのref
   const messageEndRef = useRef<HTMLDivElement | null>(null);
+  // チャットコンテナのref
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
 
   // 新しいメッセージが追加されるたびに、下部にスクロール
   useEffect(() => {
+    // メッセージが追加されたら、下部にスクロール
     if (!isScrolled && messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -73,6 +80,7 @@ const ChatMessage = () => {
   // スクロールバーを自動で非表示
   const [isScrolling, setIsScrolling] = useState<boolean>(false);
 
+  // スクロールが止まっているかどうかを監視
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
 
@@ -85,10 +93,11 @@ const ChatMessage = () => {
         setIsScrolling(false);
       }, 2000);
     };
-
+    // スクロールイベントを監視
     window.addEventListener('scroll', handleScroll);
 
     return () => {
+      // クリーンアップ
       window.removeEventListener('scroll', handleScroll);
       clearTimeout(timeoutId);
     };
@@ -102,21 +111,23 @@ const ChatMessage = () => {
         ref={chatContainerRef}  
         onScroll={handleScroll}
       >
+        {/* チャットログを表示 */}
         {chatLog.map((message:MessageType) => {
           return (
+              // メッセージの表示
               <div key={message.id} 
                     className={`mb-2 p-2 rounded-lg sm:max-w-2xl ${
                       message.sender === 'user' ? 'flex bg-blue-300 text-white self-end' : 'flex self-start' }`}>
-                
+                  {/* ユーザーのメッセージの場合はアイコンを表示*/}
                   {message.sender === 'other' && (
                     <div className="flex-shrink-0 mr-2">
                       <div className="h-8 w-8 bg-black rounded-full" /> {/* アイコンの代わり */}
                     </div>
                   )}
+                  {/* メッセージの内容 */}
                   <div  className="rounded p-2">
                     <div className={`text-sm markdown  ${
                         message.sender === 'user' ? 'whitespace-pre' : '' }`}>
-                      {/* {message.content} */}
                       <MultiLineBody body={message.content} />
                     </div>
                 </div>
@@ -125,6 +136,7 @@ const ChatMessage = () => {
           )
         })}
 
+        {/* ローディング中の表示 */}
         {isLoading.bool ? (
           <div className="mb-2 p-2 rounded-lg max-w-2xl flex self-start">  
             <div className="flex-shrink-0 mr-2">
@@ -163,9 +175,6 @@ const ChatMessage = () => {
           </button>
         </div>
       )}
-
-
-
     </>
   )
 }

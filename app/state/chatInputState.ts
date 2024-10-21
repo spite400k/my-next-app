@@ -1,4 +1,6 @@
 // states/chatInputState.ts
+// チャットの入力欄に入る文字列
+
 import { atom } from 'recoil';
 
 // メッセージオブジェクトの型を定義

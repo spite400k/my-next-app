@@ -1,4 +1,5 @@
 // states/chatLogState.ts
+// チャットのメッセージ欄の文字列リストを定義
 import { atom } from 'recoil';
 
 // メッセージオブジェクトの型を定義

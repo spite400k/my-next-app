@@ -115,7 +115,7 @@ const ChatMessage = () => {
                   )}
                   <div  className="rounded p-2">
                     <div className={`text-sm markdown  ${
-                        message.sender === 'user' ? 'whitespace-pre' : '' }`}>
+                        message.sender === 'user' ? 'whitespace-pre-wrap' : '' }`}>
                       {/* {message.content} */}
                       <MultiLineBody body={message.content} />
                     </div>

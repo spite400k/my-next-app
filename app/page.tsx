@@ -101,7 +101,7 @@ export default function Home() {
     <div className="flex flex-col h-screen">
       {/* <!-- チャットヘッダー --> */}
       <div className="p-3 bg-gray-800 text-white">
-        <h1 className="text-lg">チャットルーム</h1>
+        <h1 className="text-lg">ブログ作成支援</h1>
       </div>
       
       <ChatClient />

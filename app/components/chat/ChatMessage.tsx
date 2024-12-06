@@ -1,14 +1,14 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { chatLogState } from '../state/chatLogState';
+import { chatLogState } from '../../state/chatLogState';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { loadingState } from '../state/loadingState';
-import AnchorTag from './atoms/AnchorTag';
-import CodeBlock from './atoms/CodeBlock';
+import { loadingState } from '../../state/loadingState';
+import AnchorTag from '../atoms/AnchorTag';
+import CodeBlock from '../atoms/CodeBlock';
 import styles from './css/scrolldown.module.css'
-import FloatingActionMenuAccordion2 from './button/FloatingActionMenuAccordion2';
+import FloatingActionMenuAccordion2 from '../button/FloatingActionMenuAccordion2';
 
 type MessageType = {
   id: number;

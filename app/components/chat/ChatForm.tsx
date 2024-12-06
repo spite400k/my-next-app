@@ -1,9 +1,9 @@
 'use client'
 import React, { useRef, useState } from 'react'
 import { useRecoilState, useResetRecoilState } from 'recoil'
-import { chatLogState } from '../state/chatLogState'
-import { loadingState } from '../state/loadingState'
-import { chatInputState } from '../state/chatInputState'
+import { chatLogState } from '../../state/chatLogState'
+import { loadingState } from '../../state/loadingState'
+import { chatInputState } from '../../state/chatInputState'
 
 const ChatForm = () => {
 

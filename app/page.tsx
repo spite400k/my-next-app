@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import ChatClient from "./components/ChatClient";
-import Header from "./components/Header";
-import Sidebar from "./components/SideBar";
+import ChatClient from "./components/chat/ChatClient";
+import Header from "./components/common/Header";
+import Sidebar from "./components/common/SideBar";
 
 // ホーム
 export default function Home() {

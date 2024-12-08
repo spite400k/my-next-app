@@ -1,25 +1,29 @@
-import { useState } from 'react';
-import { useRecoilState } from 'recoil';
+'use client';
 
-import { useRouter } from 'next/navigation';
-import { userState } from '@/app/state/userAtom';
+import { signIn } from 'next-auth/react';
+import { useState } from 'react';
+import { useRouter } from "next/navigation";
+
 
 export default function Login() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const [user, setUser] = useRecoilState(userState);
+
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const result = await signIn('credentials', {
+      redirect: false,
+      email,
+      password, 
+    });
 
-    // 仮の認証ロジック
-    if (email === 'user@example.com' && password === 'password123') {
-      setUser({ email, name: 'Sample User' }); // ユーザー情報をRecoilに保存
-      router.push('/chat'); // ログイン成功でダッシュボードへ
-    } else {
-      setError('メールアドレスまたはパスワードが正しくありません。');
+    if (!result?.ok) {
+      setError('ログインに失敗しました。');
+    }else{
+        router.push("/");
     }
   };
 
@@ -27,7 +31,7 @@ export default function Login() {
     <div className="flex h-screen items-center justify-center bg-gray-100">
       <div className="w-full max-w-md bg-white p-6 rounded shadow-md">
         <h1 className="text-2xl font-bold text-center mb-4">ログイン</h1>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm mb-2">メールアドレス</label>
             <input

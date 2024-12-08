@@ -21,6 +21,12 @@ const Sidebar = () => {
           <li className="mb-2">
             <a href="/login" className="block py-2 px-4 rounded hover:bg-gray-700">ログイン</a>
           </li>
+          <li className="mb-2">
+            <a href="/signup" className="block py-2 px-4 rounded hover:bg-gray-700">会員登録</a>
+          </li>
+          <li className="mb-2">
+            <a href="/logout" className="block py-2 px-4 rounded hover:bg-gray-700">ログアウト</a>
+          </li>
         </ul>
       </nav>
     );

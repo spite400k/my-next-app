@@ -1,25 +1,15 @@
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+"use client";
 
-export default function Dashboard() {
-  const { data: session } = useSession();
-  const router = useRouter();
+import React from "react";
+import Dashboard from "../components/dashboard/dashboard";
 
-  useEffect(() => {
-    if (!session) {
-      router.push('/login');
-    }
-  }, [session, router]);
 
-  if (!session) return null;
+// ホーム
+export default function Page() {
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white p-6 rounded shadow-md text-center">
-        <h1 className="text-2xl font-bold mb-4">ダッシュボード</h1>
-        <p className="text-gray-700">ようこそ、{session.user?.name || 'ゲスト'}さん！</p>
-      </div>
+    <div>
+      <Dashboard />
     </div>
   );
 }

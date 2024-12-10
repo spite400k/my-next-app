@@ -16,7 +16,7 @@ const Sidebar = () => {
             <a href="#services" className="block py-2 px-4 rounded hover:bg-gray-700">Services</a>
           </li>
           <li className="mb-2">
-            <a href="#contact" className="block py-2 px-4 rounded h over:bg-gray-700">Contact</a>
+            <a href="/dashboard" className="block py-2 px-4 rounded h over:bg-gray-700">ダッシュボード</a>
           </li>
           <li className="mb-2">
             <a href="/login" className="block py-2 px-4 rounded hover:bg-gray-700">ログイン</a>

@@ -70,9 +70,9 @@ export default function Login() {
             </button>
 
           </form>
-                    
+          <div className="text-center py-2 ">OR</div>
           <button
-              onClick={() => signIn("google", { callbackUrl: "/" })}
+              onClick={() => signIn("google", { callbackUrl: "/login" })}
               className="w-full bg-red-500 text-white py-2 rounded"
               disabled={loading}
             >

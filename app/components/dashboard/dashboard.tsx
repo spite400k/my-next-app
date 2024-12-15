@@ -14,7 +14,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (!session) {
 
-      router.push('/login');
+      router.push('/');
     }
   }, [session, router]);
 

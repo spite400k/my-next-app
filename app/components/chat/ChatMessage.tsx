@@ -129,7 +129,7 @@ const ChatMessage = () => {
   return (
     <>
       <div
-        className="flex flex-col"
+        className="flex flex-col  bg-white shadow-md rounded-lg p-4 "
         ref={chatContainerRef}  
         onScroll={handleScroll}
       >
@@ -138,8 +138,8 @@ const ChatMessage = () => {
           return (
               // メッセージの表示
               <div key={message.id} 
-                    className={`mb-2 p-2 rounded-lg sm:max-w-2xl ${
-                      message.sender === 'user' ? 'flex bg-blue-300 text-white self-end' : 'flex self-start border border-red-400' }`}>
+                    className={`mb-2 p-2 rounded-lg sm:max-w-2xl shadow-lg ${
+                      message.sender === 'user' ? 'flex bg-blue-300 text-white self-end' : 'flex self-start border border-gray-200' }`}>
                   {/* ユーザーのメッセージの場合はアイコンを表示*/}
                   {message.sender === 'other' && (
                     <div className="flex-shrink-0 m-2">

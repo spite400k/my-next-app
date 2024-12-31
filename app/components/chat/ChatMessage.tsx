@@ -8,7 +8,11 @@ import { loadingState } from '../../state/loadingState';
 import AnchorTag from '../atoms/AnchorTag';
 import CodeBlock from '../atoms/CodeBlock';
 import styles from './css/scrolldown.module.css'
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import FloatingActionMenuAccordion2 from '../button/FloatingActionMenuAccordion2';
+import { ClipboardIcon } from '@heroicons/react/24/solid';
+import FaceIcon from './faceIcon';
+
 
 type MessageType = {
   id: number;
@@ -103,6 +107,13 @@ const ChatMessage = () => {
     };
   }, []);
 
+  // コピーした
+  const [copiedMessage, setCopiedMessage] = useState<string | null>(null);
+
+  const handleCopy = (text: string) => {
+    setCopiedMessage(text);
+    setTimeout(() => setCopiedMessage(null), 2000);
+  };
 
   return (
     <>
@@ -117,20 +128,43 @@ const ChatMessage = () => {
               // メッセージの表示
               <div key={message.id} 
                     className={`mb-2 p-2 rounded-lg sm:max-w-2xl ${
-                      message.sender === 'user' ? 'flex bg-blue-300 text-white self-end' : 'flex self-start' }`}>
+                      message.sender === 'user' ? 'flex bg-blue-300 text-white self-end' : 'flex self-start border border-red-400' }`}>
                   {/* ユーザーのメッセージの場合はアイコンを表示*/}
                   {message.sender === 'other' && (
-                    <div className="flex-shrink-0 mr-2">
-                      <div className="h-8 w-8 bg-black rounded-full" /> {/* アイコンの代わり */}
+                    <div className="flex-shrink-0 m-2">
+                      <FaceIcon />
                     </div>
                   )}
                   {/* メッセージの内容 */}
-                  <div  className="rounded p-2">
+                  <div  className="rounded p-2 flex flex-col items-center justify-between">
+                    
+                    {message.sender === 'other' && (
+                      <div className="relative group flex flex-col items-end w-full">
+                        <CopyToClipboard text={message.content} onCopy={() => handleCopy(message.content)}>
+                          <button className="p-2 rounded-md hover:bg-gray-200 transition">
+                            <ClipboardIcon className="h-6 w-6 text-gray-500 group-hover:text-gray-700" />
+                          </button>
+                        </CopyToClipboard>
+                        <div className="absolute bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
+                          コピーする
+                        </div>
+                      </div>
+
+                    )}
+
                     <div className={`text-sm markdown  ${
                         message.sender === 'user' ? 'whitespace-pre-wrap' : '' }`}>
                       {/* {message.content} */}
                       <MultiLineBody body={message.content} />
                     </div>
+ 
+                   
+                    {/* Copied Message Notification */}
+                    {copiedMessage && (
+                      <div className="fixed top-10 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-md shadow-lg animate-fade-in-out">
+                        コピーしました！
+                      </div>
+                    )}
                 </div>
 
               </div>

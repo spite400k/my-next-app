@@ -170,7 +170,10 @@ const ChatForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="relative bottom-0 w-full p-3 bg-gray-200 flex justify-between items-center">
+    <form 
+      className="fixed bottom-0 w-[calc(100%-14rem)] p-3 bg-gray-200 flex justify-between items-center"
+      style={{ marginTop: '4rem' }} // ヘッダーの高さ分を考慮
+    >
       {/* 上部リサイズハンドル */}
       <div
         className="absolute top-0 left-0 w-full h-1 cursor-ns-resize bg-gray-300"
@@ -179,24 +182,29 @@ const ChatForm = () => {
       <textarea
         value={chatInput.content}
         onChange={(e) => { setChatInput({ content: e.target.value }) }}
-        onKeyDown={(e)=>handleKeydown(e)} 
-        className="w-full p-2 mr-2 rounded focus:outline-none text-gray-800 resize-none" 
+        onKeyDown={(e) => handleKeydown(e)} 
+        className="w-full p-2 mr-2 rounded focus:outline-none text-gray-800 resize-none"
         placeholder="メッセージを入力...  ctrl+Enterでも送信できます"
         ref={textareaRef}
         style={{ height: `${height}px` }}
       />
       <div className='flex'>
-        <div className="m-auto mr-3 bg-blue-200 hover:bg-blue-300 text-white font-bold py-2 px-2 rounded w-24"
-          onClick={handleDisplayAll}>
+        <div 
+          className="m-auto mr-3 bg-blue-200 hover:bg-blue-300 text-white font-bold py-2 px-2 rounded w-24"
+          onClick={handleDisplayAll}
+        >
           全部表示
         </div>
-        <button disabled={isLoading.bool} type="submit" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-24">
+        <button 
+          disabled={isLoading.bool} 
+          type="submit" 
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
           送信
         </button>
       </div>
-
     </form>
-  )
+  );
+  
 }
 
 export default ChatForm

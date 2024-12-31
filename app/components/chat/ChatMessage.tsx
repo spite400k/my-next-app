@@ -129,7 +129,7 @@ const ChatMessage = () => {
   return (
     <>
       <div
-        className="flex flex-col overflow-y-auto"
+        className="flex flex-col"
         ref={chatContainerRef}  
         onScroll={handleScroll}
       >

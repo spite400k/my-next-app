@@ -12,6 +12,8 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import FloatingActionMenuAccordion2 from '../button/FloatingActionMenuAccordion2';
 import { ClipboardIcon } from '@heroicons/react/24/solid';
 import FaceIcon from './faceIcon';
+import { TfiWrite } from 'react-icons/tfi';
+import { chatInputState } from '@/app/state/chatInputState';
 
 
 type MessageType = {
@@ -115,6 +117,15 @@ const ChatMessage = () => {
     setTimeout(() => setCopiedMessage(null), 2000);
   };
 
+
+  // チャット入力にセットする
+  const [chatInput, setChatInput] = useRecoilState(chatInputState)
+  const handleWiteBlog = (word: string) => {
+    word = "次の内容でブログを作成する　自然な文体で書いて　" + word;
+    
+    setChatInput({ content: word });
+  };
+
   return (
     <>
       <div
@@ -138,19 +149,34 @@ const ChatMessage = () => {
                   {/* メッセージの内容 */}
                   <div  className="rounded p-2 flex flex-col items-center justify-between">
                     
+                    {/* コピーするボタン */}
                     {message.sender === 'other' && (
-                      <div className="relative group flex flex-col items-end w-full">
-                        <CopyToClipboard text={message.content} onCopy={() => handleCopy(message.content)}>
-                          <button className="p-2 rounded-md hover:bg-gray-200 transition">
-                            <ClipboardIcon className="h-6 w-6 text-gray-500 group-hover:text-gray-700" />
+                      <div className="relative flex flex-row justify-end w-full">
+
+                        {/* ブログを書くボタン */}
+                        <div className="group ">
+                          <button className='p-3 rounded-md hover:bg-gray-200 transition' onClick={() => handleWiteBlog(message.content)}>
+                            <TfiWrite />
                           </button>
-                        </CopyToClipboard>
-                        <div className="absolute bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
-                          コピーする
+                          <div className="absolute right-0 bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
+                            この内容でブログを作成する
+                          </div>
+                        </div>
+
+                        {/* コピーするボタン */}
+                        <div className="group ">
+                          <CopyToClipboard text={message.content} onCopy={() => handleCopy(message.content)}>
+                            <button className="p-2 rounded-md hover:bg-gray-200 transition">
+                              <ClipboardIcon className="h-6 w-6 text-gray-500 group-hover:text-gray-700" />
+                            </button>
+                          </CopyToClipboard>
+                          <div className="absolute bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
+                            コピーする
+                          </div>
                         </div>
                       </div>
-
                     )}
+                    
 
                     <div className={`text-sm markdown  ${
                         message.sender === 'user' ? 'whitespace-pre-wrap' : '' }`}>

@@ -171,7 +171,7 @@ const ChatForm = () => {
 
   return (
     <form 
-      className="fixed bottom-0 w-[calc(100%-14rem)] p-3 bg-gray-200 flex justify-between items-center"
+      className="fixed bottom-0 w-[calc(100%-16rem)] p-3 bg-gray-200 flex justify-between items-center"
       style={{ marginTop: '4rem' }} // ヘッダーの高さ分を考慮
     >
       {/* 上部リサイズハンドル */}

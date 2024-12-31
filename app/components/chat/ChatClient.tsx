@@ -6,9 +6,9 @@ import ChatForm from './ChatForm';
 
 const ChatClient = () => {
   return (
-    <div className="flex flex-col w-full h-full relative">
+    <div className="flex flex-col h-full">
       {/* メッセージエリア */}
-      <div className="flex-grow overflow-auto bg-white p-4">
+      <div className="flex-grow overflow-y-auto" style={{ height: 'calc(100vh - 4rem - 90px)' }}>
         <ChatMessage />
       </div>
 

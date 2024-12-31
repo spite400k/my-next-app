@@ -15,6 +15,7 @@
     "@types/react-syntax-highlighter": "^15.5.13",
     "ai": "^3.3.41",
     "bcrypt": "^5.1.1",
+    "framer-motion": "^11.15.0",
     "my-next-app": "file:",
     "next": "14.2.11",
     "next-auth": "^4.24.11",

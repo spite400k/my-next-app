@@ -11,9 +11,10 @@ import styles from './css/scrolldown.module.css'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import FloatingActionMenuAccordion2 from '../button/FloatingActionMenuAccordion2';
 import { ClipboardIcon } from '@heroicons/react/24/solid';
-import FaceIcon from './faceIcon';
+import FaceIcon from '../icons/FaceIcon';
 import { TfiWrite } from 'react-icons/tfi';
 import { chatInputState } from '@/app/state/chatInputState';
+import RobotFace from '../icons/robot';
 
 
 type MessageType = {
@@ -143,7 +144,8 @@ const ChatMessage = () => {
                   {/* ユーザーのメッセージの場合はアイコンを表示*/}
                   {message.sender === 'other' && (
                     <div className="flex-shrink-0 m-2">
-                      <FaceIcon />
+                      {/* <FaceIcon /> */}
+                      <RobotFace />
                     </div>
                   )}
                   {/* メッセージの内容 */}

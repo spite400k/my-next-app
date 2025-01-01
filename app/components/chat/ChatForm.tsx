@@ -1,6 +1,6 @@
 'use client'
 import React, { useRef, useState } from 'react'
-import { useRecoilState, useResetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { chatLogState } from '../../state/chatLogState'
 import { loadingState } from '../../state/loadingState'
 import { chatInputState } from '../../state/chatInputState'
@@ -23,12 +23,10 @@ const ChatForm = () => {
   // チャット入力欄のフォームの送信処理(ボタン押下)
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     doSubmit();
   };
   // チャット入力欄のフォームの送信処理(Enter押下)
   const handleKeydown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    //e.preventDefault();
 
     // Enterキー以外は何もしない
     if(e.key !== 'Enter') {
@@ -36,14 +34,16 @@ const ChatForm = () => {
     }
     // Enterキーが押されたとき、かつ、Ctrlキーが押されている場合
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
       doSubmit();
     }
   };
 
   // チャット送信処理
-  const doSubmit=async ()=>{
+  const doSubmit = async ()=>{
 
     // 未入力の場合は何もしない
+    if (!chatInput.content.trim()) return ;
     if (chatInput.content.length <= 0 ) return;
 
     // ローディング中は何もしない
@@ -54,7 +54,13 @@ const ChatForm = () => {
     const newId = chatLog.length > 0 ? chatLog[chatLog.length - 1].id + 1 : 1;
 
     // 送信対象のメッセージを生成
-    const newUserMessage = { id: newId, content: chatInput.content, sender: "user", time: new Date().toLocaleTimeString() };
+    const newUserMessage = {
+      id: newId,
+      content: chatInput.content,
+      sender: 'user',
+      time: new Date().toLocaleTimeString(), // クライアントサイドでのみ処理
+    };
+
     // 既存のチャットログに追加
     const updatedMessages = [...chatLog, newUserMessage];
     setChatLog(updatedMessages);
@@ -84,11 +90,13 @@ const ChatForm = () => {
       // GPT-3からのレスポンスを取得
       const result = await res.json();
       // GPT-3からのレスポンスをチャットログに追加
-      const newGptId = newId + 1;
-      const newGptMessage = { id: newGptId, content: result.gptResponseMessage, sender: "other", time: new Date().toLocaleTimeString() };
-      setChatLog([...updatedMessages, newGptMessage]);
-
-
+      const newGptMessage = {
+        id: newId + 1,
+        content: result.gptResponseMessage,
+        sender: 'other',
+        time: new Date().toLocaleTimeString(),
+      };
+      setChatLog((prevLog) => [...prevLog, newGptMessage]);
 
     } catch (error) {
       console.error('Error fetching GPT response:', error);
@@ -172,7 +180,8 @@ const ChatForm = () => {
   return (
     <form 
       className="fixed bottom-0 w-[calc(100%-16rem)] p-3 bg-gray-200 flex justify-between items-center"
-      style={{ marginTop: '4rem' }} // ヘッダーの高さ分を考慮
+      style={{ marginTop: '4rem' }}  // ヘッダーの高さ分を考慮
+      onSubmit={handleSubmit} 
     >
       {/* 上部リサイズハンドル */}
       <div

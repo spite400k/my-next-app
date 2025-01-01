@@ -7,7 +7,6 @@ import { MessageType } from '../components/chat/MessageType';
 export const chatLogState = atom<MessageType[]>({
   key: 'chatLogState',
   default: [
-    { id: 1, content: "こんにちは！", sender: "user" ,time: new Date().toLocaleTimeString()},
-    { id: 2, content: "元気ですか？", sender: "other" ,time: new Date().toLocaleTimeString()},
+    { id: 1, content: "ようこそ！問題解決のお手伝いを致します！", sender: "other" ,time: ""},
   ],
 });

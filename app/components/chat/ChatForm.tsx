@@ -5,6 +5,12 @@ import { chatLogState } from '../../state/chatLogState'
 import { loadingState } from '../../state/loadingState'
 import { chatInputState } from '../../state/chatInputState'
 
+/// グローバルに型を定義（型がない場合の対応）
+interface CustomWindow extends Window {
+  webkitSpeechRecognition?: any;
+}
+declare const window: CustomWindow;
+
 const ChatForm = () => {
 
   // const [input, setInput] = useState<string>("")
@@ -14,6 +20,7 @@ const ChatForm = () => {
   const [chatLog, setChatLog] = useRecoilState(chatLogState)
   //  ローディング状態を管理
   const [isLoading, setIsLoading] = useRecoilState(loadingState);
+  
 
   // テキストエリアの状態を管理する
   const textareaRef = useRef<HTMLTextAreaElement | null>(null); // テキストエリアの参照を管理
@@ -177,6 +184,46 @@ const ChatForm = () => {
     window.addEventListener('mouseup', stopResizing);
   };
 
+  // 音声認識に関連するステート
+  const [isListening, setIsListening] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  // 音声認識を開始する
+  const startListening = () => {
+    if (!window.webkitSpeechRecognition) {
+      setError('このブラウザは音声認識をサポートしていません。Chromeをお試しください。')
+      return
+    }
+
+    const recognition = new window.webkitSpeechRecognition()
+    recognition.lang = 'ja-JP'
+    recognition.interimResults = false
+    recognition.continuous = false
+
+    recognition.onstart = () => {
+      setIsListening(true)
+      setError(null)
+    }
+
+    recognition.onresult = (event: any) => {
+      const result = event.results[0][0].transcript
+      setChatInput({ content: chatInput.content + result }) // 音声入力を追加
+      setIsListening(false)
+    }
+
+    recognition.onerror = (event: any) => {
+      setError(`エラー: ${event.error}`)
+      setIsListening(false)
+    }
+
+    recognition.onend = () => {
+      setIsListening(false)
+    }
+
+    recognition.start()
+  }
+
+
   return (
     <form 
       className="fixed bottom-0 w-[calc(100%-16rem)] p-3 bg-gray-200 flex justify-between items-center"
@@ -198,11 +245,23 @@ const ChatForm = () => {
         style={{ height: `${height}px` }}
       />
       <div className='flex'>
-        <div 
-          className="m-auto mr-3 bg-blue-200 hover:bg-blue-300 text-white font-bold py-2 px-2 rounded w-24"
-          onClick={handleDisplayAll}
-        >
-          全部表示
+        <div className='flex flex-col'>
+          <button
+            type="button"
+            onClick={startListening}
+            className={`m-auto mr-3 ${
+              isListening ? 'bg-gray-300' : 'bg-green-500 hover:bg-green-600'
+            } text-white font-bold py-2 px-2 rounded`}
+            disabled={isListening}
+          >
+            {isListening ? '認識中...' : '音声入力'}
+          </button>
+          <div 
+            className="m-auto mr-3 bg-blue-200 hover:bg-blue-300 text-white font-bold py-2 px-2 rounded w-24"
+            onClick={handleDisplayAll}
+          >
+            全部表示
+          </div>
         </div>
         <button 
           disabled={isLoading.bool} 

@@ -54,7 +54,7 @@ const ChatForm = () => {
     const newId = chatLog.length > 0 ? chatLog[chatLog.length - 1].id + 1 : 1;
 
     // 送信対象のメッセージを生成
-    const newUserMessage = { id: newId, content: chatInput.content, sender: "user" };
+    const newUserMessage = { id: newId, content: chatInput.content, sender: "user", time: new Date().toLocaleTimeString() };
     // 既存のチャットログに追加
     const updatedMessages = [...chatLog, newUserMessage];
     setChatLog(updatedMessages);
@@ -85,7 +85,7 @@ const ChatForm = () => {
       const result = await res.json();
       // GPT-3からのレスポンスをチャットログに追加
       const newGptId = newId + 1;
-      const newGptMessage = { id: newGptId, content: result.gptResponseMessage, sender: "other" };
+      const newGptMessage = { id: newGptId, content: result.gptResponseMessage, sender: "other", time: new Date().toLocaleTimeString() };
       setChatLog([...updatedMessages, newGptMessage]);
 
 

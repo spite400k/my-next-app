@@ -2,48 +2,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { chatLogState } from '../../state/chatLogState';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import { loadingState } from '../../state/loadingState';
-import AnchorTag from '../atoms/AnchorTag';
-import CodeBlock from '../atoms/CodeBlock';
 import styles from './css/scrolldown.module.css'
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import FloatingActionMenuAccordion2 from '../button/FloatingActionMenuAccordion2';
-import { ClipboardIcon } from '@heroicons/react/24/solid';
-import { TfiWrite } from 'react-icons/tfi';
-import { chatInputState } from '@/app/state/chatInputState';
+import ActionButton from './ActionButton';
 import RobotFace from '../icons/robot';
-
-
-type MessageType = {
-  id: number;
-  content: string;
-  sender: string;
-};
-
-// マルチラインのメッセージを表示するコンポーネント
-const MultiLineBody = ({ body }: { body: string }) => {
-  // マルチラインのメッセージを改行で分割して表示
-  const texts = body.split('\\n\\n').map((item, index) => {
-    console.log(item);
-
-    // マークダウンの改行コードを変換
-    item = item.replace(/\\n/g, '\n');
-    // マークダウンのリンクを変換
-    return (
-      <React.Fragment key={index}>
-            <ReactMarkdown 
-              remarkPlugins={[remarkGfm]}
-              components={{
-                a: AnchorTag,
-                code: CodeBlock,              }}
-            >{item}</ReactMarkdown>
-      </React.Fragment>
-    );
-  });
-  return <div>{texts}</div>;
-};
+import { MessageType } from './MessageType';
+import MultiLineBody from './MultiLineBody';
 
 // チャットメッセージを表示するコンポーネント
 const ChatMessage = () => {
@@ -109,23 +74,6 @@ const ChatMessage = () => {
     };
   }, []);
 
-  // コピーした
-  const [copiedMessage, setCopiedMessage] = useState<string | null>(null);
-
-  const handleCopy = (text: string) => {
-    setCopiedMessage(text);
-    setTimeout(() => setCopiedMessage(null), 2000);
-  };
-
-
-  // チャット入力にセットする
-  const [chatInput, setChatInput] = useRecoilState(chatInputState)
-  const handleWiteBlog = (word: string) => {
-    word = "次の内容でブログを作成する　自然な文体で書いて　" + word;
-    
-    setChatInput({ content: word });
-  };
-
   return (
     <>
       <div
@@ -140,6 +88,8 @@ const ChatMessage = () => {
               <div key={message.id} 
                     className={`mb-2 p-2 rounded-lg sm:max-w-2xl shadow-lg ${
                       message.sender === 'user' ? 'flex bg-blue-300 text-white self-end' : 'flex self-start border border-gray-200' }`}>
+
+
                   {/* ユーザーのメッセージの場合はアイコンを表示*/}
                   {message.sender === 'other' && (
                     <div className="flex-shrink-0 m-2">
@@ -147,53 +97,24 @@ const ChatMessage = () => {
                       <RobotFace />
                     </div>
                   )}
+                  
                   {/* メッセージの内容 */}
-                  <div  className="rounded p-2 flex flex-col items-center justify-between">
-                    
-                    {/* コピーするボタン */}
+                  <div  className="relative rounded p-2 flex flex-col items-center justify-between">
+                    <div className={'absolute -top-6  text-xs text-gray-500 ' + (message.sender === 'other' ? '-left-20' : 'right-0')}>
+                      {message.time}
+                    </div>
+
+                    {/* actionボタン */}
                     {message.sender === 'other' && (
-                      <div className="relative flex flex-row justify-end w-full">
-
-                        {/* ブログを書くボタン */}
-                        <div className="group ">
-                          <button className='p-3 rounded-md hover:bg-gray-200 transition' onClick={() => handleWiteBlog(message.content)}>
-                            <TfiWrite />
-                          </button>
-                          <div className="absolute right-0 bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
-                            この内容でブログを作成する
-                          </div>
-                        </div>
-
-                        {/* コピーするボタン */}
-                        <div className="group ">
-                          <CopyToClipboard text={message.content} onCopy={() => handleCopy(message.content)}>
-                            <button className="p-2 rounded-md hover:bg-gray-200 transition">
-                              <ClipboardIcon className="h-6 w-6 text-gray-500 group-hover:text-gray-700" />
-                            </button>
-                          </CopyToClipboard>
-                          <div className="absolute bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
-                            コピーする
-                          </div>
-                        </div>
-                      </div>
+                      <ActionButton content={message.content}/>
                     )}
-                    
-
+                    {/* メッセージの内容 */}
                     <div className={`text-sm markdown  ${
                         message.sender === 'user' ? 'whitespace-pre-wrap' : '' }`}>
                       {/* {message.content} */}
                       <MultiLineBody body={message.content} />
                     </div>
- 
-                   
-                    {/* Copied Message Notification */}
-                    {copiedMessage && (
-                      <div className="fixed top-10 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-md shadow-lg animate-fade-in-out">
-                        コピーしました！
-                      </div>
-                    )}
                 </div>
-
               </div>
           )
         })}

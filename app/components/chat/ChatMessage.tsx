@@ -9,6 +9,7 @@ import ActionButton from './ActionButton';
 import RobotFace from '../icons/robot';
 import { MessageType } from './MessageType';
 import MultiLineBody from './MultiLineBody';
+import ColorfulRobotFace from '../icons/ColorfulRobotFace';
 
 // チャットメッセージを表示するコンポーネント
 const ChatMessage = () => {
@@ -94,7 +95,8 @@ const ChatMessage = () => {
                   {message.sender === 'other' && (
                     <div className="flex-shrink-0 m-2">
                       {/* <FaceIcon /> */}
-                      <RobotFace />
+                      {/* <RobotFace /> */}
+                      <ColorfulRobotFace/>
                     </div>
                   )}
                   

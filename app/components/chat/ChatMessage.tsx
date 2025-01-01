@@ -4,10 +4,10 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { chatLogState } from '../../state/chatLogState';
 import { loadingState } from '../../state/loadingState';
 import styles from './css/scrolldown.module.css'
-import FloatingActionMenuAccordion2 from '../button/FloatingActionMenuAccordion2';
-import ActionButton from './ActionButton';
+import FloatingActionMenuAccordion2 from '../button/floating/FloatingActionMenuAccordion2';
+import ActionButton from '../button/ActionButton';
 import RobotFace from '../icons/robot';
-import { MessageType } from './MessageType';
+import { MessageType } from '../../type/MessageType';
 import MultiLineBody from './MultiLineBody';
 import ColorfulRobotFace from '../icons/ColorfulRobotFace';
 

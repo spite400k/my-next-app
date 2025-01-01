@@ -1,7 +1,7 @@
 // states/chatLogState.ts
 // チャットのメッセージ欄の文字列リストを定義
 import { atom } from 'recoil';
-import { MessageType } from '../components/chat/MessageType';
+import { MessageType } from '../type/MessageType';
 
 // gptResponseStateの型をMessageの配列として定義
 export const chatLogState = atom<MessageType[]>({

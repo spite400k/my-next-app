@@ -4,6 +4,7 @@ import { useRecoilState } from 'recoil'
 import { chatLogState } from '../../state/chatLogState'
 import { loadingState } from '../../state/loadingState'
 import { chatInputState } from '../../state/chatInputState'
+import { FaMicrophoneLines } from 'react-icons/fa6'
 
 /// グローバルに型を定義（型がない場合の対応）
 interface CustomWindow extends Window {
@@ -249,25 +250,30 @@ const ChatForm = () => {
           <button
             type="button"
             onClick={startListening}
-            className={`m-auto mr-3 ${
+            className={`m-auto mr-1 mb-1 ${
               isListening ? 'bg-gray-300' : 'bg-green-500 hover:bg-green-600'
-            } text-white font-bold py-2 px-2 rounded`}
-            disabled={isListening}
+            } text-white font-bold py-3 px-2 rounded w-24`}
+            disabled={isListening || isLoading.bool}
           >
-            {isListening ? '認識中...' : '音声入力'}
+            {isListening ? '認識中...' 
+              :     
+              <div className="flex items-center justify-center ">
+                <FaMicrophoneLines className="text-xl" />
+              </div>
+            }
           </button>
-          <div 
-            className="m-auto mr-3 bg-blue-200 hover:bg-blue-300 text-white font-bold py-2 px-2 rounded w-24"
-            onClick={handleDisplayAll}
-          >
-            全部表示
-          </div>
+          <button 
+            type="button"
+            className="m-auto mr-1 bg-blue-300 hover:bg-blue-500 text-white font-bold py-2 px-2 rounded w-24"
+            onClick={handleDisplayAll}>
+            {'全部表示'}
+          </button>
         </div>
         <button 
-          disabled={isLoading.bool} 
+          disabled={isListening || isLoading.bool} 
           type="submit" 
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-          送信
+          {'送信'}
         </button>
       </div>
     </form>

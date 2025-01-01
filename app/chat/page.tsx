@@ -14,7 +14,9 @@ export default function Page() {
       <Header />
       <div className="flex flex-grow">
         <Sidebar />
-        <ChatClient />
+        <div className="flex-grow flex flex-col bg-gray-100">
+          <ChatClient />
+        </div>
       </div>
     </div>
   );

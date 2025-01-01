@@ -252,7 +252,7 @@ const ChatForm = () => {
             onClick={startListening}
             className={`m-auto mr-1 mb-1 ${
               isListening ? 'bg-gray-300' : 'bg-green-500 hover:bg-green-600'
-            } text-white font-bold py-3 px-2 rounded w-24`}
+            } text-white font-bold py-3 rounded w-24`}
             disabled={isListening || isLoading.bool}
           >
             {isListening ? '認識中...' 
@@ -264,7 +264,7 @@ const ChatForm = () => {
           </button>
           <button 
             type="button"
-            className="m-auto mr-1 bg-blue-300 hover:bg-blue-500 text-white font-bold py-2 px-2 rounded w-24"
+            className="m-auto mr-1 bg-blue-300 hover:bg-blue-500 text-white font-bold py-2 rounded w-24"
             onClick={handleDisplayAll}>
             {'全部表示'}
           </button>

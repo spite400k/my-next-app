@@ -22,21 +22,10 @@ export async function POST(request: Request) {
     },
     { 
       role: "user", 
-      content: prompt ,
+      content: "次のカテゴリからブログ記事に適切なトピックを５つ選んでください。 その時トピックのリストだけ返して　" + prompt ,
     },
   ];
-
-  {
-    chatLog.map((message:MessageType) => {
-      messages.push(
-        {
-          role: "assistant", // "user" | "assistant" | "system"
-          content: message.content, // string
-        }
-      )
-    })
-  }
-  
+    
   const gptResponseMessage = await sendPromptToGpt(messages);
   const response = NextResponse.json({ gptResponseMessage })
   return response;

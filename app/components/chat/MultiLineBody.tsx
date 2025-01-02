@@ -8,7 +8,7 @@ import remarkGfm from 'remark-gfm';
 const MultiLineBody = ({ body }: { body: string }) => {
   // マルチラインのメッセージを改行で分割して表示
   const texts = body.split('\\n\\n').map((item, index) => {
-    console.log(item);
+    // console.log(item);
 
     // マークダウンの改行コードを変換
     item = item.replace(/\\n/g, '\n');

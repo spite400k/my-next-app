@@ -3,13 +3,13 @@ import { ClipboardIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { TfiWrite } from "react-icons/tfi";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 
 
 const ActionButton = ({ content }: { content: string }) => {
 
   // チャット入力にセットする
-  const [chatInput, setChatInput] = useRecoilState(chatInputState)
+  const setChatInput = useSetRecoilState(chatInputState)
   const handleWiteBlog = (word: string) => {
     word = "次の内容でブログを作成する　自然な文体で書いて　" + word;
     

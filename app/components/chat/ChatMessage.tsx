@@ -4,9 +4,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { chatLogState } from '../../state/chatLogState';
 import { loadingState } from '../../state/loadingState';
 import styles from './css/scrolldown.module.css'
-import FloatingActionMenuAccordion2 from '../button/floating/FloatingActionMenuAccordion2';
+import FloatingActionMenuAccordion from '../button/floating/FloatingActionMenuAccordion';
 import ActionButton from '../button/ActionButton';
-import RobotFace from '../icons/robot';
 import { MessageType } from '../../type/MessageType';
 import MultiLineBody from './MultiLineBody';
 import ColorfulRobotFace from '../icons/ColorfulRobotFace';
@@ -14,7 +13,7 @@ import ColorfulRobotFace from '../icons/ColorfulRobotFace';
 // チャットメッセージを表示するコンポーネント
 const ChatMessage = () => {
   // チャットログを管理
-  const [chatLog, setChatLog] = useRecoilState(chatLogState)
+  const [chatLog] = useRecoilState(chatLogState)
   // ローディング状態を管理
   const isLoading = useRecoilValue(loadingState);
   // スクロール位置を管理
@@ -58,11 +57,11 @@ const ChatMessage = () => {
 
     const handleScroll = () => {
       clearTimeout(timeoutId);
-      setIsScrolling(true);
+      setIsScrolling(!isScrolling);
 
       // スクロールが止まってから2秒後にスクロールバーを消す
       timeoutId = setTimeout(() => {
-        setIsScrolling(false);
+        setIsScrolling(!isScrolling);
       }, 2000);
     };
     // スクロールイベントを監視
@@ -94,8 +93,6 @@ const ChatMessage = () => {
                   {/* ユーザーのメッセージの場合はアイコンを表示*/}
                   {message.sender === 'other' && (
                     <div className="flex-shrink-0 m-2">
-                      {/* <FaceIcon /> */}
-                      {/* <RobotFace /> */}
                       <ColorfulRobotFace/>
                     </div>
                   )}
@@ -144,9 +141,7 @@ const ChatMessage = () => {
         {/* スクロールのターゲット */}
         <div ref={messageEndRef} className="" />
         {/* フローティングアクションボタン */}
-        {/* <FloatingActionMenu /> */}
-        {/* <FloatingActionMenuAccordion/> */}
-        <FloatingActionMenuAccordion2/>
+        <FloatingActionMenuAccordion/>
       </div>
 
       {/* スクロールダウンボタン（必要なときのみ表示） */}

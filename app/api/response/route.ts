@@ -1,13 +1,11 @@
 // app/api/response/route.ts
 
 import { NextResponse } from 'next/server';
-import { openaiClient, sendPromptToGpt } from "@/app/services/openai-service";
+import { sendPromptToGpt } from "@/app/services/openai-service";
 import OpenAI from 'openai';
 import { MessageType } from '@/app/type/MessageType';
 
 export async function POST(request: Request) {
-  
-  const openai = openaiClient();
 
   const { prompt ,chatLog} = await request.json();
 
@@ -15,7 +13,7 @@ export async function POST(request: Request) {
     あなたは今から天才ブロガーとして生きることになりました。
   `;
 
-  let messages :OpenAI.Chat.ChatCompletionMessageParam[] = [
+  const messages :OpenAI.Chat.ChatCompletionMessageParam[] = [
     {
       role: "system", // "user" | "assistant" | "system"
       content: botSystem, // string

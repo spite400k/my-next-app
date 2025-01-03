@@ -1,8 +1,8 @@
 import { chatInputState } from '@/app/state/chatInputState';
 import React, { useState } from 'react';
-import { FaPlus, FaEdit, FaTrash, FaShare } from 'react-icons/fa';
+import { FaPlus} from 'react-icons/fa';
 import { FaChevronUp, FaHandPointLeft } from 'react-icons/fa6';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 type MenuItem = {
   subItems: SubMenuItem[];
@@ -21,7 +21,7 @@ type SubMenuItem = {
 
 const FloatingActionMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [chatInput, setChatInput] = useRecoilState(chatInputState)
+  const setChatInput = useSetRecoilState(chatInputState)
   // アコーディオンの開閉状態を管理する
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   
@@ -34,20 +34,7 @@ const FloatingActionMenu: React.FC = () => {
   };
 
   const handleMenuOpen = (word: string) => setChatInput({ content: word });
-  const handleMenuClick = () => toggleAccordion();
-    // サブメニューがクリックされたときに実行される関数
-  const handleSubMenuClick = (word: string) => setChatInput({ content: word });
 
-
-  // サブメニューアイテムの配列
-  const subMenuItems: SubMenuItem[] = [
-    { id: 4.1, action: (word : string) => handleSubMenuClick(word) ,  menuName:'関連するキーワードを探す　' , prompt : "次のワードに関連するSEOキーワードを10個特定してください。"},
-    { id: 4.2, action: (word : string) => handleSubMenuClick(word) ,  menuName:'キーワードの「検索意図」を表にする　' , prompt : "次のワードの検索意図（Buyクエリ、Knowクエリ、Doクエリ、Goクエリ）を表に分類してください。"},
-    { id: 4.3, action: (word : string) => handleSubMenuClick(word) ,  menuName:'キーワード戦略を調査する　' , prompt : "次のワードの上位5つのSEOキーワード戦略を調査してください。"},
-    { id: 4.4, action: (word : string) => handleSubMenuClick(word) ,  menuName:'検索ボリュームと難易度を指定する　' , prompt : "あなたが SEOリーダーであると仮定します。次のワードについて、検索ボリュームが多く、難易度は低いキーワードをいくつか提案してください。"},
-    { id: 4.5, action: (word : string) => handleSubMenuClick(word) ,  menuName:'ロングテールキーワードを提案させる　' , prompt : "あなたがコンテンツマーケターと仮定します。次のワードに関連するロングテールで高ボリューム、低難度のキーワードを提供してください。"},
-    { id: 4.6, action: (word : string) => handleSubMenuClick(word) ,  menuName:'キーワードからトピックをリスト化させる　' , prompt : "あなたがオンラインマーケティングマネージャーと仮定します。次のワードに関連する広範なトピックのリストを作成し、各トピックを顧客が使用すると思われるフレーズのリストで展開してください。"},
-  ];
   // メニューアイテムの配列
   const menuItems: MenuItem[] = [
     {

@@ -18,8 +18,13 @@ const MultiLineBody = ({ body }: { body: string }) => {
             <ReactMarkdown 
               remarkPlugins={[remarkGfm]}
               components={{
-                a: AnchorTag,
-                code: CodeBlock,              }}
+                  a: ({node, ...props}) => <AnchorTag {...props} />,
+                  code: ({node, className, children, ...props}) => (
+                    <CodeBlock className={className} {...props}>
+                      {children}
+                    </CodeBlock>
+                  ),
+                }}
             >{item}</ReactMarkdown>
       </React.Fragment>
     );

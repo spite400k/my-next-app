@@ -6,11 +6,54 @@ import { loadingState } from '../../state/loadingState'
 import { chatInputState } from '../../state/chatInputState'
 import { FaMicrophoneLines } from 'react-icons/fa6'
 
-/// グローバルに型を定義（型がない場合の対応）
+// グローバル Window 拡張
 interface CustomWindow extends Window {
-  webkitSpeechRecognition?: any;
+  webkitSpeechRecognition?: typeof webkitSpeechRecognition;
 }
 declare const window: CustomWindow;
+
+// webkitSpeechRecognition クラス型定義
+declare class webkitSpeechRecognition {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  maxAlternatives: number;
+
+  onstart: (() => void) | null;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+  onend: (() => void) | null;
+
+  start(): void;
+  stop(): void;
+  abort(): void;
+}
+
+// 必要な型定義の追加
+interface SpeechRecognitionResult {
+  isFinal: boolean;
+  [index: number]: SpeechRecognitionAlternative;
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognitionEvent {
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionResultList {
+  length: number;
+  [index: number]: SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionErrorEvent {
+  error: string;
+  message: string;
+}
+
 
 const ChatForm = () => {
 
@@ -206,13 +249,13 @@ const ChatForm = () => {
       setError(null)
     }
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       const result = event.results[0][0].transcript
       setChatInput({ content: chatInput.content + result }) // 音声入力を追加
       setIsListening(false)
     }
 
-    recognition.onerror = (event: any) => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       setError(`エラー: ${event.error}`)
       setIsListening(false)
     }

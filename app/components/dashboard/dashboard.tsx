@@ -8,7 +8,6 @@ import { useRecoilState } from 'recoil';
 
 export default function Dashboard() {
   const { data: session } = useSession();
-  const [sessionData, setSessionData] = useRecoilState(sessionState);
   const router = useRouter();
 
   useEffect(() => {

@@ -1,18 +1,13 @@
 "use client";
-import { keywordInputState } from '@/app/state/keywordInputState';
-import { keywordLogState } from '@/app/state/keywordLogState';
 import { loadingState } from '@/app/state/loadingState';
-import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import LoadingSpinner from '../common/LoadingSpinner';
-import MultiLineBody from '../chat/MultiLineBody';
+import { useState } from 'react';
 
 const TopicSelection = () => {
   const categories = ['テクノロジー', 'ライフスタイル', '健康', 'ビジネス', '教育'];
   const sexes = ['男性', '女性', 'その他'];
   const ages = ['10代', '20代', '30代','40代', '50代', '60代','70代', '80代', '90代'];
-  const interests = [];
-  const issues = [];
 
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -25,8 +20,6 @@ const TopicSelection = () => {
 
   //  ローディング状態を管理
   const [isLoading, setIsLoading] = useRecoilState(loadingState);
-  // チャット欄の入力値を管理
-  const [keywordInput, setKeywordInput] = useState<string | null>(null)
   
   
   // const suggestedTopics = [

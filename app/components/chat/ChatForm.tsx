@@ -257,6 +257,7 @@ const ChatForm = () => {
 
     recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       setError(`エラー: ${event.error}`)
+      console.log(error);
       setIsListening(false)
     }
 

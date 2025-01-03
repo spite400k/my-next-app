@@ -9,7 +9,7 @@ export async function POST(request: Request) {
   
   const openai = openaiClient();
 
-  const { prompt ,chatLog} = await request.json();
+  const { prompt ,chatLog, num} = await request.json();
 
   const botSystem = `
     あなたは今から天才ブロガーとして生きることになりました。
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     },
     { 
       role: "user", 
-      content: "次のカテゴリからブログ記事に適切なトピックを５つ選んでください。 その時トピックのリストだけ返して　" + prompt ,
+      content: "次のカテゴリからブログ記事に適切なトピックを"+{num}+"つ選んでください。 その時トピックのリストだけ返して　" + prompt ,
     },
   ];
     

@@ -3,20 +3,31 @@ import { loadingState } from '@/app/state/loadingState';
 import { useRecoilState } from 'recoil';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { useState } from 'react';
+import { chatInputState } from '@/app/state/chatInputState';
+import { useRouter } from 'next/navigation';
 
 const TopicSelection = () => {
   const categories = ['テクノロジー', 'ライフスタイル', '健康', 'ビジネス', '教育'];
   const sexes = ['男性', '女性', 'その他'];
   const ages = ['10代', '20代', '30代','40代', '50代', '60代','70代', '80代', '90代'];
 
-
+  // カテゴリー
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  // 生成キーワード
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+  // トピック
   const [customTopic, setCustomTopic] = useState('');
+  // 生成されたトピック
   const [suggestedTopics, setSuggestedTopics] = useState<string[]>([]);
-
+  // 年代
   const [selectedAge, setSelectedAge] = useState<string[]>();
+  // 性別
   const [selectedSex, setSelectedSex] = useState<string[]>();
+  
+  const router = useRouter();
+  
+  // チャット欄の入力値を管理
+  const [chatInput, setChatInput] = useRecoilState(chatInputState)
 
   //  ローディング状態を管理
   const [isLoading, setIsLoading] = useRecoilState(loadingState);
@@ -36,18 +47,20 @@ const TopicSelection = () => {
   //   }
   // }, [selectedCategory]);
   
+  // カテゴリー選択時の処理
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
     setSelectedTopic(null); // Reset topic when category changes
     choiceCategory(category)
   };
 
-
+  // トピック入力時の処理
   const handleCustomTopicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCustomTopic(e.target.value);
     // setKeywordInput(e.target.value);
   };
 
+  // トピック入力時の処理
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && customTopic.trim() !== "") {
       handleTopicSelect(customTopic.trim());
@@ -57,10 +70,12 @@ const TopicSelection = () => {
     }
   };
 
+  // トピック選択時の処理
   const handleTopicSelect = (topic: string) => {
     setSelectedTopic(topic);
     // setCustomTopic(''); // Reset custom topic when a predefined topic is selected
   };
+  // 年代選択時の処理
   const handleAgeSelect = (age: string) => {
       setSelectedAge((prevAges) => {
         if (prevAges?.includes(age)) {
@@ -71,6 +86,7 @@ const TopicSelection = () => {
       });
     };
 
+  // 性別選択時の処理
   const handleSexSelect = (sex: string) => {
       setSelectedSex((prevSexes) => {
         if (prevSexes?.includes(sex)) {
@@ -81,6 +97,7 @@ const TopicSelection = () => {
       });
     };
 
+  // 次へボタンクリック時の処理
   const handleNext = () => {
     const finalTopic = customTopic || selectedTopic || selectedCategory;
     if (!finalTopic) {
@@ -88,6 +105,21 @@ const TopicSelection = () => {
       return;
     }
     console.log('選択されたトピック:', finalTopic);
+
+    // チャット欄の入力値を更新
+    setChatInput({
+      content: 
+      "次の内容でブログ記事を書いて  " +
+      "カテゴリー: " + selectedCategory + 
+      "  トピック: "+ customTopic + 
+      "  生成キーワード: "+  selectedTopic  + 
+      "  年代: "+  selectedAge + 
+      "  性別: "+ selectedSex });
+    // console.log('選択されたトピック:', chatInput.content);
+
+
+    router.push('/chat');
+
     // Navigate to the next step or save the selection
   };
 

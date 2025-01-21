@@ -33,7 +33,7 @@ const ActionButton = ({ content }: { content: string }) => {
                 <TfiWrite />
             </button>
             <div className="absolute right-0 bottom-full mb-2 hidden group-hover:block bg-black text-white text-xs px-2 py-1 rounded-md whitespace-nowrap">
-                この内容でブログを作成する
+                この内容で自然な文体でブログを作成する
             </div>
             </div>
 

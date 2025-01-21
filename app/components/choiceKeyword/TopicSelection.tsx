@@ -2,7 +2,7 @@
 import { loadingState } from '@/app/state/loadingState';
 import { useRecoilState } from 'recoil';
 import LoadingSpinner from '../common/LoadingSpinner';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { chatInputState } from '@/app/state/chatInputState';
 import { useRouter } from 'next/navigation';
 
@@ -32,7 +32,25 @@ const TopicSelection = () => {
   //  ローディング状態を管理
   const [isLoading, setIsLoading] = useRecoilState(loadingState);
   
-  
+  useEffect(() => {
+    const fetchKeywords = async () => {
+      try {
+        const response = await fetch('/api/keyword');
+        if (!response.ok) {
+          throw new Error('Failed to fetch keywords');
+        }
+        const data = await response.json();
+        console.log(data);
+        // setKeyword(data);
+      } catch (error) {
+        // setError(error.message);
+      } finally {
+        setIsLoading({ bool: false });
+      }
+    };
+
+    fetchKeywords();
+  }, []);
   // const suggestedTopics = [
   //   '2025年注目のテクノロジートレンド',
   //   '効果的なリモートワークの方法',
@@ -96,6 +114,35 @@ const TopicSelection = () => {
         }
       });
     };
+  // 次へボタンクリック時の処理
+  const savekeyword = async () => {
+    const finalTopic = customTopic || selectedTopic || selectedCategory;
+    if (!finalTopic) {
+      alert('トピックを選択または入力してください！');
+      return;
+    }
+
+    const response = await fetch('/api/keyword', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+          selectedCategory: selectedCategory,
+          customTopic: customTopic,
+          selectedTopic: selectedTopic,
+          selectedAge: selectedAge ? selectedAge.join(',') : '',
+          selectedSex: selectedSex ? selectedSex.join(',') : '',
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Response error');
+    }
+  
+    const result = await response.json();
+    console.log(result);
+  };
 
   // 次へボタンクリック時の処理
   const handleNext = () => {
@@ -285,13 +332,21 @@ const TopicSelection = () => {
 
         </div>
 
+      <div className="mt-8 flex justify-end">
+        <button
+          onClick={savekeyword}
+          className="px-6 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600"
+        >
+          キーワードを保存する
+        </button>
+      </div>
       {/* Navigation Buttons */}
       <div className="mt-8 flex justify-end">
         <button
           onClick={handleNext}
           className="px-6 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600"
         >
-          次へ
+          AIで作成する
         </button>
       </div>
 

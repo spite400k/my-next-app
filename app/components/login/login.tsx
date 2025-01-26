@@ -50,47 +50,53 @@ export default function Login() {
             </div>
           </div>
 
-          <div className="w-1/2 p-8">
+          <div className="w-1/2 p-8 flex flex-col justify-center">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Log In</h2>
-              {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-              <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm mb-2">メールアドレス</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
-                    placeholder="メールアドレス"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 text-sm mb-2">パスワード</label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
-                    placeholder="パスワード"
-                  />
-                </div>  
-                <button
-                  type="submit"
-                  className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
-                  disabled={loading}
-                >
-                  ログイン
-                </button>
-
-              </form>
-              <div className="text-center py-2 ">OR</div>
-                <button
-                  onClick={() => signIn("google", { callbackUrl: "/login" })}
-                  className="w-full bg-red-500 text-white py-2 rounded"
-                  disabled={loading}
-                >
-                Sign in with Google
+            {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm mb-2">メールアドレス</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+                  placeholder="メールアドレス"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm mb-2">パスワード</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+                  placeholder="パスワード"
+                />
+              </div>  
+              <button
+                type="submit"
+                className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
+                disabled={loading}
+              >
+                ログイン
               </button>
+
+            </form>
+            <div className="text-center py-2 ">もしくは</div>
+              <button
+                onClick={() => signIn("google", { callbackUrl: "/login" })}
+                className="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600"
+                disabled={loading}
+              >
+              Sign in with Google
+            </button>
+            <div className="text-center pt-10 ">アカウントをお持ちでないですか？</div>
+            <button 
+              className="w-full bg-blue-900 text-white py-2 rounded-md hover:bg-blue-700 transition" 
+              disabled={loading}>
+              <a href="/signup">会員登録</a>
+            </button>
           </div>
         </div>
       </div>

@@ -40,7 +40,36 @@ const handler = NextAuth({
   ],
   secret: process.env.NEXTAUTH_SECRET,
   session: {
-    strategy: "jwt",
+    strategy: "jwt", // JWTを使ってセッションを管理
+    maxAge: 24 * 60 * 60, // セッションの有効期限を24時間に設定
+    updateAge: 60 * 60, // セッション情報を1時間ごとに更新
+  },
+  callbacks: {
+    async jwt({ token, account }) {
+      if (account) {
+        token.accessToken = account.access_token;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.accessToken = token.accessToken;
+      }
+      return session;
+    },
+  },
+  pages: {
+    signIn: '/login', // サインインページのカスタムURL
+  },
+  cookies: {
+    sessionToken: {
+      name: 'next-auth.session-token',
+      options: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // 本番環境では secure を有効にする
+        path: '/', // セッションは全サイトで有効
+      },
+    },
   },
 });
 

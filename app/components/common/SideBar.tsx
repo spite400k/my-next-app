@@ -7,7 +7,7 @@ const Sidebar = () => {
   const { data: session } = useSession();
 
     return (
-      <nav className="w-64 bg-gray-800 text-white p-4">
+      <nav className="w-64 bg-blue-500 text-white p-4">
         <ul>
 
           <li className="mb-2">

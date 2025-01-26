@@ -36,50 +36,63 @@ export default function Login() {
     <>
       {loading && <LoadingSpinner />}
 
-      <div className="flex h-screen items-center justify-center bg-gray-100">
-        <div className="w-full max-w-md bg-white p-6 rounded shadow-md">
-          <h1 className="text-2xl font-bold text-center mb-4">ログイン</h1>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm mb-2">メールアドレス</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
-                placeholder="メールアドレス"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm mb-2">パスワード</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
-                placeholder="パスワード"
-              />
-            </div>
-            {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
-              disabled={loading}
-            >
-              ログイン
-            </button>
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="flex w-full max-w-4xl bg-white shadow-lg rounded-2xl overflow-hidden">
+          <div className="w-1/2 bg-blue-500 p-8 flex flex-col justify-center text-white">
 
-          </form>
-          <div className="text-center py-2 ">OR</div>
-          <button
-              onClick={() => signIn("google", { callbackUrl: "/login" })}
-              className="w-full bg-red-500 text-white py-2 rounded"
-              disabled={loading}
-            >
-              Sign in with Google
-            </button>
+            {/* Left Section */}
+            <div className="bg-blue-500 p-8 flex flex-col justify-center text-white">
+              <h2 className="text-3xl font-bold mb-4">ブログ作成の新しいスタートを、AIと一緒に。</h2>
+              <p className="text-lg">
+                ブログを書く時間がない、アイデアが浮かばない、そんな悩みを解決します。<br /><br />
+              </p>
+              <img src="/login.webp" alt="login" />
+            </div>
+          </div>
+
+          <div className="w-1/2 p-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">Log In</h2>
+              {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+              <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm mb-2">メールアドレス</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+                    placeholder="メールアドレス"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 text-sm mb-2">パスワード</label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+                    placeholder="パスワード"
+                  />
+                </div>  
+                <button
+                  type="submit"
+                  className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
+                  disabled={loading}
+                >
+                  ログイン
+                </button>
+
+              </form>
+              <div className="text-center py-2 ">OR</div>
+                <button
+                  onClick={() => signIn("google", { callbackUrl: "/login" })}
+                  className="w-full bg-red-500 text-white py-2 rounded"
+                  disabled={loading}
+                >
+                Sign in with Google
+              </button>
+          </div>
         </div>
-
       </div>
     </>
   );

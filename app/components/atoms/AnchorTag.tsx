@@ -1,10 +1,23 @@
-const AnchorTag = ({ node, children, ...props }: any) => {
+import React from "react";
+
+type AnchorTagProps = React.AnchorHTMLAttributes<HTMLAnchorElement>;
+
+const AnchorTag: React.FC<AnchorTagProps> = ({ children, href, ...props }) => {
   try {
-      new URL(props.href ?? "");
+    if (href) {
+      new URL(href); // URLの妥当性をチェック
       props.target = "_blank";
       props.rel = "noopener noreferrer";
-  } catch (e) { }
-  return <a {...props}>{children}</a>;
-}
+    }
+  } catch {
+    // 無効なURLの場合はデフォルトの動作
+  }
 
-export default AnchorTag
+  return (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  );
+};
+
+export default AnchorTag;

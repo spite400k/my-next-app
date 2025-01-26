@@ -3,11 +3,11 @@
 import { NextResponse } from 'next/server';
 import { sendPromptToGpt } from "@/app/services/openai-service";
 import OpenAI from 'openai';
-import { MessageType } from '@/app/type/MessageType';
 
 export async function POST(request: Request) {
+  
 
-  const { prompt ,chatLog} = await request.json();
+  const { prompt ,num} = await request.json();
 
   const botSystem = `
     あなたは今から天才ブロガーとして生きることになりました。
@@ -20,21 +20,10 @@ export async function POST(request: Request) {
     },
     { 
       role: "user", 
-      content: prompt ,
+      content: "次のカテゴリからブログ記事に適切なトピックを"+{num}+"つ選んでください。 その時トピックのリストだけ返して　" + prompt ,
     },
   ];
-
-  {
-    chatLog.map((message:MessageType) => {
-      messages.push(
-        {
-          role: "assistant", // "user" | "assistant" | "system"
-          content: message.content, // string
-        }
-      )
-    })
-  }
-  
+    
   const gptResponseMessage = await sendPromptToGpt(messages);
   const response = NextResponse.json({ gptResponseMessage })
   return response;

@@ -1,14 +1,11 @@
 "use client";
 
-import { sessionState } from '@/app/state/sessionState';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
 
 export default function Dashboard() {
   const { data: session } = useSession();
-  const [sessionData, setSessionData] = useRecoilState(sessionState);
   const router = useRouter();
 
   useEffect(() => {

@@ -6,39 +6,41 @@ export const openaiClient = () => {
   });
 };
 
-const botSystem = `
-あなたは今から天才ブロガーとして生きることになりました。
-`;
+// const botSystem = `
+// あなたは今から天才ブロガーとして生きることになりました。
+// `;
 
-type MessageType = {
-  id: number;
-  content: string;
-  sender: string;
-};
+// type MessageType = {
+//   id: number;
+//   content: string;
+//   sender: string;
+// };
 
-export const sendPromptToGpt = async (prompt: string, chatLog: MessageType[]) => {
+export const sendPromptToGpt = async (messages: OpenAI.Chat.ChatCompletionMessageParam[]) => {
   const openai = openaiClient();
-  let messages :OpenAI.Chat.ChatCompletionMessageParam[] = [
-    {
-      role: "system", // "user" | "assistant" | "system"
-      content: botSystem, // string
-    },
-    { 
-      role: "user", 
-      content: prompt ,
-    },
-  ];
+  // let messages :OpenAI.Chat.ChatCompletionMessageParam[] = [
+  //   {
+  //     role: "system", // "user" | "assistant" | "system"
+  //     content: botSystem, // string
+  //   },
+  //   { 
+  //     role: "user", 
+  //     content: prompt ,
+  //   },
+  // ];
 
-  {chatLog.map((message:MessageType) => {
-    messages.push(
-      {
-        role: "assistant", // "user" | "assistant" | "system"
-        content: message.content, // string
-      }
-    )
-  })
-}
-console.log(messages)
+  // {
+  //   chatLog.map((message:MessageType) => {
+  //     messages.push(
+  //       {
+  //         role: "assistant", // "user" | "assistant" | "system"
+  //         content: message.content, // string
+  //       }
+  //     )
+  //   })
+  // }
+  // console.log("openai-service.ts");
+  // console.log(messages)
   const completion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
     messages: messages,

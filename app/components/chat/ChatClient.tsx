@@ -1,23 +1,21 @@
-'use client'
+'use client';
 
-import React from 'react'
-import ChatMessage from './ChatMessage'
-import ChatForm from './ChatForm'
+import React from 'react';
+import ChatMessage from './ChatMessage';
+import ChatForm from './ChatForm';
 
 const ChatClient = () => {
-
   return (
-        <div className="flex flex-col  w-full ">
-          {/* <!-- メッセージエリア --> */}
-          <div className="mx-auto w-full flex flex-col flex-grow overflow-hidden bg-white rounded-lg shadow p-1 mb-2 gap-4 lg:gap-6">
-            <ChatMessage />
-          </div>
-
-          {/* <!-- テキスト入力エリア --> */}
-          <ChatForm />
-
+    <div className="flex flex-col h-full">
+      {/* メッセージエリア */}
+      <div className="flex-grow overflow-y-auto pb-20 bg-white" style={{ height: 'calc(100vh - 4rem - 90px)' }}>
+        <ChatMessage />
       </div>
-  )
-}
 
-export default ChatClient
+      {/* 入力エリア */}
+      <ChatForm />
+    </div>
+  );
+};
+
+export default ChatClient;

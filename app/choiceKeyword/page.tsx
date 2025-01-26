@@ -3,7 +3,7 @@
 import React from "react";
 import Header from "../components/common/Header";
 import Sidebar from "../components/common/SideBar";
-import ChatClient from "../components/chat/ChatClient";
+import TopicSelection from "../components/choiceKeyword/TopicSelection";
 
 // ホーム
 export default function Page() {
@@ -15,7 +15,7 @@ export default function Page() {
       <div className="flex flex-grow">
         <Sidebar />
         <div className="flex-grow flex flex-col bg-gray-100">
-          <ChatClient />
+          <TopicSelection />
         </div>
       </div>
     </div>

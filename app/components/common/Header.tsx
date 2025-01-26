@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 
 const Header = () => {
     const { data: session } = useSession();
-    let username = (session != null ? session.user?.name : 'ゲスト');
+    const username = (session != null ? session.user?.name : 'ゲスト');
 
 
     return (

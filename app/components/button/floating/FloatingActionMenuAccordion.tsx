@@ -1,8 +1,8 @@
 import { chatInputState } from '@/app/state/chatInputState';
 import React, { useState } from 'react';
-import { FaPlus, FaEdit, FaTrash, FaShare, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaPlus, FaChevronUp } from 'react-icons/fa';
 import { FaHandPointDown, FaHandPointLeft } from 'react-icons/fa6';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 interface MenuItem {
   id: number;
@@ -99,7 +99,7 @@ const FloatingActionMenuAccordion2: React.FC = () => {
     
   };
 
-  const [chatInput, setChatInput] = useRecoilState(chatInputState)
+  const setChatInput = useSetRecoilState(chatInputState)
   // サブメニューがクリックされたときに実行される関数
   const handleSubMenuClick = (word: string) => {
     setChatInput({ content: word });
@@ -158,7 +158,7 @@ const FloatingActionMenuAccordion2: React.FC = () => {
                 {item.subItems && openAccordions[item.id] && (
                   <ul className="space-y-2 absolute w-max bottom-1  right-80 bg-blue-200 p-5">
                     {item.subItems.map((subItem) => (
-                      <div className="">
+                      <div key={subItem.id} className="">
                         <li key={subItem.id} className="flex  gap-1 mb-2 ">
                           <button
                             onClick={()=>subItem.onClick(subItem.prompt)}

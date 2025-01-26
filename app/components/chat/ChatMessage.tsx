@@ -2,47 +2,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { chatLogState } from '../../state/chatLogState';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import { loadingState } from '../../state/loadingState';
-import AnchorTag from '../atoms/AnchorTag';
-import CodeBlock from '../atoms/CodeBlock';
 import styles from './css/scrolldown.module.css'
-import FloatingActionMenuAccordion2 from '../button/FloatingActionMenuAccordion2';
-
-type MessageType = {
-  id: number;
-  content: string;
-  sender: string;
-};
-
-// マルチラインのメッセージを表示するコンポーネント
-const MultiLineBody = ({ body }: { body: string }) => {
-  // マルチラインのメッセージを改行で分割して表示
-  const texts = body.split('\\n\\n').map((item, index) => {
-    console.log(item);
-
-    // マークダウンの改行コードを変換
-    item = item.replace(/\\n/g, '\n');
-    // マークダウンのリンクを変換
-    return (
-      <React.Fragment key={index}>
-            <ReactMarkdown 
-              remarkPlugins={[remarkGfm]}
-              components={{
-                a: AnchorTag,
-                code: CodeBlock,              }}
-            >{item}</ReactMarkdown>
-      </React.Fragment>
-    );
-  });
-  return <div>{texts}</div>;
-};
+import FloatingActionMenuAccordion from '../button/floating/FloatingActionMenuAccordion';
+import ActionButton from '../button/ActionButton';
+import { MessageType } from '../../type/MessageType';
+import MultiLineBody from './MultiLineBody';
+import ColorfulRobotFace from '../icons/ColorfulRobotFace';
 
 // チャットメッセージを表示するコンポーネント
 const ChatMessage = () => {
   // チャットログを管理
-  const [chatLog, setChatLog] = useRecoilState(chatLogState)
+  const [chatLog] = useRecoilState(chatLogState)
   // ローディング状態を管理
   const isLoading = useRecoilValue(loadingState);
   // スクロール位置を管理
@@ -86,11 +57,11 @@ const ChatMessage = () => {
 
     const handleScroll = () => {
       clearTimeout(timeoutId);
-      setIsScrolling(true);
+      setIsScrolling(!isScrolling);
 
       // スクロールが止まってから2秒後にスクロールバーを消す
       timeoutId = setTimeout(() => {
-        setIsScrolling(false);
+        setIsScrolling(!isScrolling);
       }, 2000);
     };
     // スクロールイベントを監視
@@ -103,11 +74,10 @@ const ChatMessage = () => {
     };
   }, []);
 
-
   return (
     <>
       <div
-        className="flex flex-col overflow-y-auto"
+        className="flex flex-col bg-white rounded-lg p-4"
         ref={chatContainerRef}  
         onScroll={handleScroll}
       >
@@ -116,23 +86,34 @@ const ChatMessage = () => {
           return (
               // メッセージの表示
               <div key={message.id} 
-                    className={`mb-2 p-2 rounded-lg sm:max-w-2xl ${
-                      message.sender === 'user' ? 'flex bg-blue-300 text-white self-end' : 'flex self-start' }`}>
+                    className={`mb-2 p-2 rounded-lg sm:max-w-2xl shadow-lg ${
+                      message.sender === 'user' ? 'flex bg-blue-300 text-white self-end' : 'flex self-start border border-gray-200' }`}>
+
+
                   {/* ユーザーのメッセージの場合はアイコンを表示*/}
                   {message.sender === 'other' && (
-                    <div className="flex-shrink-0 mr-2">
-                      <div className="h-8 w-8 bg-black rounded-full" /> {/* アイコンの代わり */}
+                    <div className="flex-shrink-0 m-2">
+                      <ColorfulRobotFace/>
                     </div>
                   )}
+                  
                   {/* メッセージの内容 */}
-                  <div  className="rounded p-2">
+                  <div  className="relative rounded p-2 flex flex-col items-center justify-between">
+                    <div className={'absolute -top-6  text-xs text-gray-500 ' + (message.sender === 'other' ? '-left-20' : 'right-0')}>
+                      {message.time}
+                    </div>
+
+                    {/* actionボタン */}
+                    {message.sender === 'other' && (
+                      <ActionButton content={message.content}/>
+                    )}
+                    {/* メッセージの内容 */}
                     <div className={`text-sm markdown  ${
                         message.sender === 'user' ? 'whitespace-pre-wrap' : '' }`}>
                       {/* {message.content} */}
                       <MultiLineBody body={message.content} />
                     </div>
                 </div>
-
               </div>
           )
         })}
@@ -160,9 +141,7 @@ const ChatMessage = () => {
         {/* スクロールのターゲット */}
         <div ref={messageEndRef} className="" />
         {/* フローティングアクションボタン */}
-        {/* <FloatingActionMenu /> */}
-        {/* <FloatingActionMenuAccordion/> */}
-        <FloatingActionMenuAccordion2/>
+        <FloatingActionMenuAccordion/>
       </div>
 
       {/* スクロールダウンボタン（必要なときのみ表示） */}

@@ -16,3 +16,13 @@ model User {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
+
+model keyWord {
+  id       Int    @id @default(autoincrement())
+  selectedCategory String
+  customTopic     String
+  selectedTopic   String
+  selectedAge     String  // 配列ではなく文字列として保存
+  selectedSex     String  // 配列ではなく文字列として保存
+  createdAt DateTime @default(now())
+}

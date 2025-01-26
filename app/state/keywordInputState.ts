@@ -1,4 +1,4 @@
-// states/chatInputState.ts
+// states/keywordInputState.ts
 // チャットの入力欄に入る文字列
 
 import { atom } from 'recoil';
@@ -9,7 +9,7 @@ interface Message {
 }
 
 // gptResponseStateの型をMessageの配列として定義
-export const chatInputState = atom<Message>({
-  key: 'chatInputState',
+export const keywordInputState = atom<Message>({
+  key: 'keywordInputState',
   default: { content: '' }, // 必ず空文字列で初期化
 });

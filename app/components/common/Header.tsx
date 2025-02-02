@@ -36,7 +36,7 @@ const Header = () => {
             </Head>
             <h1 className="text-lg text-left">ブログ作成支援</h1>
             <div className="flex flex-row">
-                <h2 className="text-right my-auto">ようこそ、{user?.name}さん！</h2>
+                <h2 className="text-right my-auto">ようこそ、{user?.name || 'ゲスト'}さん！</h2>
                 {session == null ? (
                     <button className="mx-2 bg-white rounded text-black w-24">
                         <a href="/login" className="block py-2 px-4 rounded hover:bg-gray-300">

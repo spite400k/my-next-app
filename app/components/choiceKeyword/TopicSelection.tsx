@@ -1,38 +1,56 @@
 "use client";
-import { loadingState } from '@/app/state/loadingState';
-import { useRecoilState } from 'recoil';
-import LoadingSpinner from '../common/LoadingSpinner';
-import { useEffect, useState } from 'react';
-import { chatInputState } from '@/app/state/chatInputState';
-import { useRouter } from 'next/navigation';
-import SavedKeyWordView from './SavedKeyWordView';
+import { loadingState } from "@/app/state/loadingState";
+import { useRecoilState } from "recoil";
+import LoadingSpinner from "../common/LoadingSpinner";
+import { useEffect, useState } from "react";
+import { chatInputState } from "@/app/state/chatInputState";
+import { useRouter } from "next/navigation";
+import SavedKeyWordView from "./SavedKeyWordView";
 
 const TopicSelection = () => {
-  const categories = ['テクノロジー', 'ライフスタイル', '健康', 'ビジネス', '教育'];
-  const sexes = ['男性', '女性', 'その他'];
-  const ages = ['10代', '20代', '30代','40代', '50代', '60代','70代', '80代', '90代'];
+  const categories = [
+    "テクノロジー",
+    "ライフスタイル",
+    "健康",
+    "ビジネス",
+    "教育",
+  ];
+  const sexes = ["男性", "女性", "その他"];
+  const ages = [
+    "10代",
+    "20代",
+    "30代",
+    "40代",
+    "50代",
+    "60代",
+    "70代",
+    "80代",
+    "90代",
+  ];
 
   // カテゴリー
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   // 生成キーワード
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   // トピック
-  const [customTopic, setCustomTopic] = useState('');
+  const [customTopic, setCustomTopic] = useState("");
   // 生成されたトピック
   const [suggestedTopics, setSuggestedTopics] = useState<string[]>([]);
   // 年代
   const [selectedAge, setSelectedAge] = useState<string[]>();
   // 性別
   const [selectedSex, setSelectedSex] = useState<string[]>();
-  
+
   const router = useRouter();
-  
+
   // チャット欄の入力値を管理
-  const [chatInput, setChatInput] = useRecoilState(chatInputState)
+  const [chatInput, setChatInput] = useRecoilState(chatInputState);
 
   //  ローディング状態を管理
   const [isLoading, setIsLoading] = useRecoilState(loadingState);
-  
+
+  const [keyword, setKeyword] = useState<any[]>([]);
+
   // useEffect(() => {
   //   const fetchKeywords = async () => {
   //     try {
@@ -65,12 +83,12 @@ const TopicSelection = () => {
   //     choiceCategory(selectedCategory);
   //   }
   // }, [selectedCategory]);
-  
+
   // カテゴリー選択時の処理
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
     setSelectedTopic(null); // Reset topic when category changes
-    choiceCategory(category)
+    choiceCategory(category);
   };
 
   // トピック入力時の処理
@@ -84,8 +102,7 @@ const TopicSelection = () => {
     if (e.key === "Enter" && customTopic.trim() !== "") {
       handleTopicSelect(customTopic.trim());
       // setCustomTopic(""); // 入力後にフィールドをクリア
-      choiceCategory(customTopic.trim())
-  
+      choiceCategory(customTopic.trim());
     }
   };
 
@@ -96,51 +113,52 @@ const TopicSelection = () => {
   };
   // 年代選択時の処理
   const handleAgeSelect = (age: string) => {
-      setSelectedAge((prevAges) => {
-        if (prevAges?.includes(age)) {
-          return prevAges.filter((a) => a !== age);
-        } else {
-          return prevAges ? [...prevAges, age] : [age];
-        }
-      });
-    };
+    setSelectedAge((prevAges) => {
+      if (prevAges?.includes(age)) {
+        return prevAges.filter((a) => a !== age);
+      } else {
+        return prevAges ? [...prevAges, age] : [age];
+      }
+    });
+  };
 
   // 性別選択時の処理
   const handleSexSelect = (sex: string) => {
-      setSelectedSex((prevSexes) => {
-        if (prevSexes?.includes(sex)) {
-          return prevSexes.filter((s) => s !== sex);
-        } else {
-          return prevSexes ? [...prevSexes, sex] : [sex];
-        }
-      });
-    };
+    setSelectedSex((prevSexes) => {
+      if (prevSexes?.includes(sex)) {
+        return prevSexes.filter((s) => s !== sex);
+      } else {
+        return prevSexes ? [...prevSexes, sex] : [sex];
+      }
+    });
+  };
+
   // 次へボタンクリック時の処理
   const savekeyword = async () => {
     const finalTopic = customTopic || selectedTopic || selectedCategory;
     if (!finalTopic) {
-      alert('トピックを選択または入力してください！');
+      alert("トピックを選択または入力してください！");
       return;
     }
 
-    const response = await fetch('/api/keyword', {
-      method: 'POST',
+    const response = await fetch("/api/keyword", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-          selectedCategory: selectedCategory,
-          customTopic: customTopic,
-          selectedTopic: selectedTopic,
-          selectedAge: selectedAge ? selectedAge.join(',') : '',
-          selectedSex: selectedSex ? selectedSex.join(',') : '',
+        selectedCategory: selectedCategory,
+        customTopic: customTopic,
+        selectedTopic: selectedTopic,
+        selectedAge: selectedAge ? selectedAge.join(",") : "",
+        selectedSex: selectedSex ? selectedSex.join(",") : "",
       }),
     });
 
     if (!response.ok) {
-      throw new Error('Response error');
+      throw new Error("Response error");
     }
-  
+
     const result = await response.json();
     // console.log(result);
   };
@@ -149,47 +167,49 @@ const TopicSelection = () => {
   const handleNext = () => {
     const finalTopic = customTopic || selectedTopic || selectedCategory;
     if (!finalTopic) {
-      alert('トピックを選択または入力してください！');
+      alert("トピックを選択または入力してください！");
       return;
     }
     // console.log('選択されたトピック:', finalTopic);
 
     // チャット欄の入力値を更新
     setChatInput({
-      content: 
-      "次の内容でブログ記事を書いて  " +
-      "カテゴリー: " + selectedCategory + 
-      "  トピック: "+ customTopic + 
-      "  生成キーワード: "+  selectedTopic  + 
-      "  年代: "+  selectedAge + 
-      "  性別: "+ selectedSex });
+      content:
+        "次の内容でブログ記事を書いて  " +
+        "カテゴリー: " +
+        selectedCategory +
+        "  トピック: " +
+        customTopic +
+        "  生成キーワード: " +
+        selectedTopic +
+        "  年代: " +
+        selectedAge +
+        "  性別: " +
+        selectedSex,
+    });
     // console.log('選択されたトピック:', chatInput.content);
 
-
-    router.push('/chat');
+    router.push("/chat");
 
     // Navigate to the next step or save the selection
   };
 
-
-
   // チャット送信処理
-  const choiceCategory = async (category: string)=>{
-
+  const choiceCategory = async (category: string) => {
     // ローディング中は何もしない
-    setIsLoading({ bool: true});
+    setIsLoading({ bool: true });
 
     // 送信対象のメッセージを生成
     const newUserMessage = {
       id: 1,
-      content: category || '',
-      sender: 'user',
+      content: category || "",
+      sender: "user",
       time: new Date().toLocaleTimeString(), // クライアントサイドでのみ処理
     };
 
     // 既存のチャットログに追加
     const updatedMessages = [newUserMessage];
-  
+
     // GPT-3にリクエストを送信
     try {
       const res = await fetch(`/api/responseCategory`, {
@@ -197,11 +217,15 @@ const TopicSelection = () => {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
         },
-        body: JSON.stringify({ prompt: category, chatLog:updatedMessages , num:10}),
+        body: JSON.stringify({
+          prompt: category,
+          chatLog: updatedMessages,
+          num: 10,
+        }),
       });
-      
+
       if (!res.ok) {
-        throw new Error('Response error');
+        throw new Error("Response error");
       }
 
       // GPT-3からのレスポンスを取得
@@ -209,33 +233,85 @@ const TopicSelection = () => {
       // console.log(result.gptResponseMessage)
       // 正規表現で番号付きリストを抽出
       const regex = /^\d+\.\s*(.+)$/gm;
-      const matches = [...result.gptResponseMessage.matchAll(regex)].map(match => match[1]);
+      const matches = [...result.gptResponseMessage.matchAll(regex)].map(
+        (match) => match[1]
+      );
       // console.log(matches);
 
       setSuggestedTopics(matches || []); // ここで更新
-
     } catch (error) {
-      console.error('Error fetching GPT response:', error);
+      console.error("Error fetching GPT response:", error);
     } finally {
       // ローディングを終了する
       setIsLoading({ bool: false });
     }
-  }
+  };
+
+  useEffect(() => {
+    const fetchKeywords = async () => {
+      try {
+        const response = await fetch("/api/keyword");
+        if (!response.ok) {
+          throw new Error("Failed to fetch keywords");
+        }
+        const data = await response.json();
+        console.log(data);
+        setKeyword(data);
+      } catch (error) {
+        // setError(error.message);
+      } finally {
+        setIsLoading({ bool: false });
+      }
+    };
+
+    fetchKeywords();
+  }, []);
+
+  // 選択時のハンドラー
+  const handleSelectKeyword = (item: any) => {
+    setSelectedCategory(item.category);
+    setSelectedTopic(item.customTopic);
+    setSelectedSex(item.sex);
+    setSelectedAge(item.age);
+  };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto flex flex-row gap-2">
+    <div className="p-2 max-w-4xl mx-auto flex flex-row gap-2">
+      <div className="p-2 w-1/3 mx-auto">
+        {isLoading.bool && <LoadingSpinner />}
 
-      
-      <SavedKeyWordView />
-      <div>
+        <h1 className="text-2xl font-bold">保存したキーワード</h1>
+        <div className="mt-4">
+          <div className="flex flex-wrap">
+            {keyword.map((item) => (
+              <button
+                key={item.id}
+                className="bg-gray-200 p-2 m-1 rounded-lg"
+                onClick={() => handleSelectKeyword(item)}
+              >
+                {item.selectedCategory}
+                {item.customTopic}
+                {item.selectedSex}
+                {item.selectedAge}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="p-2 w-2/3 mx-auto">
         {isLoading.bool && <LoadingSpinner />}
         {/* Title and Description */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold mb-2">トピックを選択してください</h1>
-          <p className="text-gray-600">記事にしたいトピックを選ぶか、自由に入力してください。AIが最適な記事を生成します！</p>
+          <h1 className="text-2xl font-bold mb-2">
+            トピックを選択してください
+          </h1>
+          <p className="text-gray-600">
+            記事にしたいトピックを選ぶか、自由に入力してください。AIが最適な記事を生成します！
+          </p>
         </div>
 
-        <div className="mb-8 grid grid-cols-4 gap-x-4 border border-gray-200">
+        {/* <div className="mb-8 grid grid-cols-4 gap-x-4 border border-gray-200">
           <div className="bg-gray-100 px-4 py-2 font-bold">カテゴリー</div>
           <div className="px-4 py-2 col-span-3">{selectedCategory}</div>
 
@@ -250,7 +326,7 @@ const TopicSelection = () => {
           
           <div className="bg-gray-100 px-4 py-2 font-bold">性別</div>
           <div className="px-4 py-2 col-span-3">{selectedSex}</div>
-        </div>
+        </div> */}
 
         <div className="grid grid-rows-2 gap-6 border p-2">
           {/* Categories and Suggested Topics */}
@@ -262,7 +338,9 @@ const TopicSelection = () => {
                   key={category}
                   onClick={() => handleCategorySelect(category)}
                   className={`px-4 py-2 border rounded ${
-                    selectedCategory === category ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
+                    selectedCategory === category
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-100 hover:bg-gray-200"
                   }`}
                 >
                   {category}
@@ -270,28 +348,33 @@ const TopicSelection = () => {
               ))}
             </div>
 
+            {/* Custom Input and Search */}
+            <div>
+              <h2 className="text-xl font-semibold mt-6">
+                トピックを自由に入力
+              </h2>
+              <input
+                type="text"
+                value={customTopic}
+                onChange={handleCustomTopicChange}
+                onKeyDown={handleKeyDown}
+                placeholder="例: 自宅でできる簡単エクササイズ"
+                className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
 
-          {/* Custom Input and Search */}
-          <div>
-            <h2 className="text-xl font-semibold mt-6">トピックを自由に入力</h2>
-            <input
-              type="text"
-              value={customTopic}
-              onChange={handleCustomTopicChange}
-              onKeyDown={handleKeyDown}
-              placeholder="例: 自宅でできる簡単エクササイズ"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-            <h2 className="text-xl font-semibold mt-6 mb-4">生成されたキーワードを選ぶ</h2>
+            <h2 className="text-xl font-semibold mt-6 mb-4">
+              生成されたキーワードを選ぶ
+            </h2>
             <div className="overflow-x-auto flex gap-4 flex-wrap max-w-full">
               {suggestedTopics.map((topic) => (
                 <button
                   key={topic}
                   onClick={() => handleTopicSelect(topic)}
                   className={`px-4 py-2 border rounded whitespace-nowrap ${
-                    selectedTopic === topic ? 'bg-green-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
+                    selectedTopic === topic
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-100 hover:bg-gray-200"
                   }`}
                 >
                   {topic}
@@ -301,39 +384,42 @@ const TopicSelection = () => {
           </div>
         </div>
 
-          {/* Target */}
-          <div>
-            <h2 className="text-xl font-semibold mb-4">年齢を選択</h2>
-            <div className="flex flex-wrap gap-2">
-              {ages.map((age) => (
-                <button
-                  key={age}
-                  onClick={() => handleAgeSelect(age)}
-                  className={`px-4 py-2 border rounded ${
-                    selectedAge?.includes(age) ? 'bg-blue-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
-                  }`}
-                >
-                  {age}
-                </button>
-              ))}
-            </div>
-
-            <h2 className="text-xl font-semibold mt-6 mb-4">性別を選択</h2>
-            <div className="overflow-x-auto flex gap-4 flex-wrap max-w-full">
-              {sexes.map((sex) => (
-                <button
-                  key={sex}
-                  onClick={() => handleSexSelect(sex)}
-                  className={`px-4 py-2 border rounded whitespace-nowrap ${
-                    selectedSex?.includes(sex) ? 'bg-green-500 text-white' : 'bg-gray-100 hover:bg-gray-200'
-                  }`}
-                >
-                  {sex}
-                </button>
-              ))}
-            </div>
-
+        {/* Target */}
+        <div>
+          <h2 className="text-xl font-semibold mb-4">年齢を選択</h2>
+          <div className="flex flex-wrap gap-2">
+            {ages.map((age) => (
+              <button
+                key={age}
+                onClick={() => handleAgeSelect(age)}
+                className={`px-4 py-2 border rounded ${
+                  selectedAge?.includes(age)
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-100 hover:bg-gray-200"
+                }`}
+              >
+                {age}
+              </button>
+            ))}
           </div>
+
+          <h2 className="text-xl font-semibold mt-6 mb-4">性別を選択</h2>
+          <div className="overflow-x-auto flex gap-4 flex-wrap max-w-full">
+            {sexes.map((sex) => (
+              <button
+                key={sex}
+                onClick={() => handleSexSelect(sex)}
+                className={`px-4 py-2 border rounded whitespace-nowrap ${
+                  selectedSex?.includes(sex)
+                    ? "bg-green-500 text-white"
+                    : "bg-gray-100 hover:bg-gray-200"
+                }`}
+              >
+                {sex}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div className="mt-8 flex justify-end">
           <button

@@ -51,38 +51,25 @@ const TopicSelection = () => {
 
   const [keyword, setKeyword] = useState<any[]>([]);
 
-  // useEffect(() => {
-  //   const fetchKeywords = async () => {
-  //     try {
-  //       const response = await fetch('/api/keyword');
-  //       if (!response.ok) {
-  //         throw new Error('Failed to fetch keywords');
-  //       }
-  //       const data = await response.json();
-  //       console.log(data);
-  //       // setKeyword(data);
-  //     } catch (error) {
-  //       // setError(error.message);
-  //     } finally {
-  //       setIsLoading({ bool: false });
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchKeywords = async () => {
+      try {
+        const response = await fetch("/api/keyword");
+        if (!response.ok) {
+          throw new Error("Failed to fetch keywords");
+        }
+        const data = await response.json();
+        console.log(data);
+        setKeyword(data);
+      } catch (error) {
+        // setError(error.message);
+      } finally {
+        setIsLoading({ bool: false });
+      }
+    };
 
-  //   fetchKeywords();
-  // }, []);
-  // const suggestedTopics = [
-  //   '2025年注目のテクノロジートレンド',
-  //   '効果的なリモートワークの方法',
-  //   'ダイエット成功の秘訣',
-  //   'AIによる未来予測',
-  //   '初心者向け投資ガイド',
-  // ];
-
-  // useEffect(() => {
-  //   if (selectedCategory !== null) {
-  //     choiceCategory(selectedCategory);
-  //   }
-  // }, [selectedCategory]);
+    fetchKeywords();
+  }, []);
 
   // カテゴリー選択時の処理
   const handleCategorySelect = (category: string) => {
@@ -247,26 +234,6 @@ const TopicSelection = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchKeywords = async () => {
-      try {
-        const response = await fetch("/api/keyword");
-        if (!response.ok) {
-          throw new Error("Failed to fetch keywords");
-        }
-        const data = await response.json();
-        console.log(data);
-        setKeyword(data);
-      } catch (error) {
-        // setError(error.message);
-      } finally {
-        setIsLoading({ bool: false });
-      }
-    };
-
-    fetchKeywords();
-  }, []);
-
   // 選択時のハンドラー
   const handleSelectKeyword = (item: any) => {
     setSelectedCategory(item.category);
@@ -277,16 +244,16 @@ const TopicSelection = () => {
 
   return (
     <div className="p-2 max-w-4xl mx-auto flex flex-row gap-2">
-      <div className="p-2 w-1/3 mx-auto">
+      <div className="p-2 w-64 mx-auto">
         {isLoading.bool && <LoadingSpinner />}
 
         <h1 className="text-2xl font-bold">保存したキーワード</h1>
         <div className="mt-4">
-          <div className="flex flex-wrap">
+          <div className="flex flex-wrap ">
             {keyword.map((item) => (
               <button
                 key={item.id}
-                className="bg-gray-200 p-2 m-1 rounded-lg"
+                className="bg-gray-200 p-2 m-1 rounded-lg text-left "
                 onClick={() => handleSelectKeyword(item)}
               >
                 {item.selectedCategory}
@@ -299,7 +266,7 @@ const TopicSelection = () => {
         </div>
       </div>
 
-      <div className="p-2 w-2/3 mx-auto">
+      <div className="p-2 mx-auto">
         {isLoading.bool && <LoadingSpinner />}
         {/* Title and Description */}
         <div className="mb-6">
@@ -328,7 +295,7 @@ const TopicSelection = () => {
           <div className="px-4 py-2 col-span-3">{selectedSex}</div>
         </div> */}
 
-        <div className="grid grid-rows-2 gap-6 border p-2">
+        <div className="grid gap-6 border p-2">
           {/* Categories and Suggested Topics */}
           <div>
             <h2 className="text-xl font-semibold mb-4">カテゴリーから選択</h2>
@@ -364,7 +331,7 @@ const TopicSelection = () => {
             </div>
 
             <h2 className="text-xl font-semibold mt-6 mb-4">
-              生成されたキーワードを選ぶ
+              {suggestedTopics.length > 0 && "生成されたキーワードを選ぶ"}
             </h2>
             <div className="overflow-x-auto flex gap-4 flex-wrap max-w-full">
               {suggestedTopics.map((topic) => (

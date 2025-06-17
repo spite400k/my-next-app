@@ -3,8 +3,10 @@
 import React, { useEffect, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 import { chatState } from '@/lib/states/chatState';
-import ChatMessage from './ChatMessage';
+
 import ChatForm from './ChatForm';
+import {ChatMessage} from './ChatMessage';
+
 
 const ChatClient = () => {
   const chats = useRecoilValue(chatState);

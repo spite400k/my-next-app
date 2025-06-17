@@ -31,6 +31,8 @@ const ChatForm = () => {
       });
 
       const data = await res.json();
+      console.log('📦 API応答:', data); // ← ここ追加
+
       const botMessage = {
         text: data.reply || 'エラーが発生しました。',
         sender: 'ai' as const,

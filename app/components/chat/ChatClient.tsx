@@ -20,7 +20,7 @@ const ChatClient = () => {
     <div className="flex flex-col h-screen overflow-hidden">
       <div className="flex-grow overflow-y-auto p-4">
         {chats.map((chat, index) => (
-          <ChatMessage key={index} text={chat.text} sender={chat.sender} />
+          <ChatMessage key={index} text={chat.text} sender={chat.sender}  timestamp={chat.timestamp} />
         ))}
         <div ref={bottomRef} />
       </div>

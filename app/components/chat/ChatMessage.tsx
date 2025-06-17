@@ -3,14 +3,17 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import type { Components } from 'react-markdown';
-
+import dayjs from 'dayjs';
+import 'dayjs/locale/ja'; // 日本語ロケールを使用する場合はコメントアウトを外してください
 type Props = {
   text: string;
   sender: 'user' | 'ai';
+  timestamp?: string | Date;
 };
 
-export const ChatMessage = ({ text, sender }: Props) => {
+export const ChatMessage = ({ text, sender, timestamp }: Props) => {
   const isUser = sender === 'user';
+  const formattedTime = dayjs(timestamp ?? new Date()).format('YYYY/MM/DD HH:mm');
 
   const markdownComponents: Components = {
     code({ node, inline, className, children, ...props }) {
@@ -80,10 +83,16 @@ export const ChatMessage = ({ text, sender }: Props) => {
             <span>考え中...</span>
           </div>
         ) : (
-          <ReactMarkdown components={markdownComponents}>
-            {text}
-          </ReactMarkdown>
+          <>
+            <ReactMarkdown components={markdownComponents}>
+              {text}
+            </ReactMarkdown>
+            <div className={`text-xs text-gray-400 text-right mt-1 ${isUser ? 'text-white' : 'text-gray-500'}`}>
+              {formattedTime}
+            </div>
+          </>
         )}
+
       </div>
     </div>
   );

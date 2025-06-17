@@ -16,8 +16,8 @@ const ChatForm = () => {
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
-    const userMessage = { text: input, sender: 'user' as const };
-    const loadingMessage = { text: '...', sender: 'ai' as const }; // 仮のローディング表示
+    const userMessage = { text: input, sender: 'user' as const, timestamp: new Date().toISOString() };
+    const loadingMessage = { text: '...', sender: 'ai' as const, timestamp: new Date().toISOString() }; // 仮のローディング表示
 
     setChats(prev => [...prev, userMessage, loadingMessage]);
     setInput('');
@@ -36,6 +36,7 @@ const ChatForm = () => {
       const botMessage = {
         text: data.reply || 'エラーが発生しました。',
         sender: 'ai' as const,
+        timestamp: new Date().toISOString(), // タイムスタンプを追加
       };
 
       // 最後のローディングメッセージを差し替える
@@ -47,7 +48,7 @@ const ChatForm = () => {
       console.error('APIエラー:', error);
       setChats(prev => [
         ...prev.slice(0, -1),
-        { text: 'エラーが発生しました。', sender: 'ai' },
+        { text: 'エラーが発生しました。', sender: 'ai' , timestamp: new Date().toISOString() },
       ]);
     } finally {
       setIsLoading(false);

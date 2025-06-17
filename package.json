@@ -15,6 +15,7 @@
     "@types/react-syntax-highlighter": "^15.5.13",
     "ai": "^3.3.41",
     "bcrypt": "^5.1.1",
+    "dayjs": "^1.11.13",
     "framer-motion": "^11.15.0",
     "lucide-react": "^0.516.0",
     "my-next-app": "file:",

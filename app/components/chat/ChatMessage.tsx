@@ -1,10 +1,11 @@
-import { Loader2 } from 'lucide-react';
+import { Loader2, Copy } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import type { Components } from 'react-markdown';
 import dayjs from 'dayjs';
-import 'dayjs/locale/ja'; // 日本語ロケールを使用する場合はコメントアウトを外してください
+import 'dayjs/locale/ja';
+
 type Props = {
   text: string;
   sender: 'user' | 'ai';
@@ -68,6 +69,15 @@ export const ChatMessage = ({ text, sender, timestamp }: Props) => {
     },
   };
 
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert('メッセージをコピーしました');
+    } catch {
+      alert('コピーに失敗しました');
+    }
+  };
+
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-2`}>
       <div
@@ -87,12 +97,22 @@ export const ChatMessage = ({ text, sender, timestamp }: Props) => {
             <ReactMarkdown components={markdownComponents}>
               {text}
             </ReactMarkdown>
-            <div className={`text-xs text-gray-400 text-right mt-1 ${isUser ? 'text-white' : 'text-gray-500'}`}>
-              {formattedTime}
+
+            <div className={`flex justify-end items-center space-x-2 mt-1 ${isUser ? 'text-white/70' : 'text-gray-500'}`}>
+              <div className="text-xs">{formattedTime}</div>
+              {!isUser && (
+                <button
+                  onClick={handleCopy}
+                  className="p-1 hover:bg-gray-300 rounded"
+                  aria-label="コピー"
+                  type="button"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+              )}
             </div>
           </>
         )}
-
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
-// lib/states/chatState.ts
+// chatState.ts
 import { atom } from 'recoil';
 
-type ChatMessage = {
-  timestamp: string | Date | undefined;
+export type ChatMessage = {
   text: string;
   sender: 'user' | 'ai';
+  timestamp?: string;
 };
 
 export const chatState = atom<ChatMessage[]>({

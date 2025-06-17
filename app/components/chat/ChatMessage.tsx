@@ -125,28 +125,63 @@ export const ChatMessage = ({ text, sender, timestamp }: Props) => {
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-2`}>
       <div
-        className={`w-[80%] px-4 py-3 rounded-xl whitespace-pre-wrap break-words ${
-          isUser
-            ? 'bg-blue-500 text-white rounded-br-none'
+        className={`
+          max-w-[80%]
+          px-4 py-3 rounded-xl whitespace-pre-wrap break-words
+          ${isUser
+            ? 'bg-blue-500 text-white rounded-br-none ml-auto text-right'
             : 'bg-gray-100 text-black rounded-bl-none'
-        }`}
+          }
+        `}
       >
-        {text === '...' ? (
+
+        { text === '...' ? (
           <div className="flex items-center gap-2 text-gray-600">
             <Loader2 className="animate-spin w-4 h-4" />
             <span>考え中...</span>
           </div>
         ) : (
-          <>
+          <div className="relative">
+            {/* マークダウン表示 */}
             <ReactMarkdown components={markdownComponents}>{text}</ReactMarkdown>
+
+            {/* コピー完了メッセージ */}
+            {copiedBlock && (
+              <div className="absolute bottom-6 right-1 text-xs bg-green-600 text-white rounded px-2 select-none">
+                コピーしました！
+              </div>
+            )}
+
+            {/* タイムスタンプ + コピーアイコン（右下） */}
             <div
               className={`flex justify-end items-center space-x-2 mt-1 ${
                 isUser ? 'text-white/70' : 'text-gray-500'
               }`}
             >
               <div className="text-xs">{formattedTime}</div>
+
+              {/* AIの発言のみアイコン表示 */}
+              {!isUser && text !== '...' && (
+                <button
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(text);
+                      setCopiedBlock(true);
+                      setTimeout(() => setCopiedBlock(false), 1500);
+                    } catch {
+                      alert('コピーに失敗しました');
+                    }
+                  }}
+                  className="p-1 text-gray-500 hover:text-gray-800"
+                  aria-label="全文をコピー"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+              )}
             </div>
-          </>
+          </div>
+
+
         )}
       </div>
     </div>

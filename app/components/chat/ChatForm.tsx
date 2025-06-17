@@ -4,45 +4,54 @@ import React, { useState, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { chatState } from '@/lib/states/chatState';
 import TextareaAutosize from 'react-textarea-autosize';
-import { Mic, MicOff, Send } from 'lucide-react';
+import { Mic, MicOff, Send, Loader2 } from 'lucide-react';
 
 const ChatForm = () => {
   const [input, setInput] = useState('');
   const [chats, setChats] = useRecoilState(chatState);
   const [listening, setListening] = useState(false);
-  const [isSending, setIsSending] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   const handleSend = async () => {
-    if (!input.trim() || isSending) return;
+    if (!input.trim() || isLoading) return;
 
     const userMessage = { text: input, sender: 'user' as const };
-    setChats(prev => [...prev, userMessage]);
+    const loadingMessage = { text: '...', sender: 'ai' as const }; // 仮のローディング表示
+
+    setChats(prev => [...prev, userMessage, loadingMessage]);
     setInput('');
-    setIsSending(true);
+    setIsLoading(true);
 
     try {
-      // GPT APIへリクエスト
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: input }),
       });
 
-      if (!res.ok) throw new Error('Failed to fetch GPT response');
-
       const data = await res.json();
+      const botMessage = {
+        text: data.reply || 'エラーが発生しました。',
+        sender: 'ai' as const,
+      };
 
-      const gptMessage = { text: data.reply, sender: 'ai' as const };
-      setChats(prev => [...prev, gptMessage]);
-    } catch (err) {
-      console.error(err);
-      const errorMessage = { text: 'エラーが発生しました。', sender: 'ai' as const };
-      setChats(prev => [...prev, errorMessage]);
+      // 最後のローディングメッセージを差し替える
+      setChats(prev => [
+        ...prev.slice(0, -1), // 最後の「...」を除く
+        botMessage,
+      ]);
+    } catch (error) {
+      console.error('APIエラー:', error);
+      setChats(prev => [
+        ...prev.slice(0, -1),
+        { text: 'エラーが発生しました。', sender: 'ai' },
+      ]);
     } finally {
-      setIsSending(false);
+      setIsLoading(false);
     }
   };
+
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -87,9 +96,10 @@ const ChatForm = () => {
 
   return (
     <div className="flex items-end gap-2 p-4 border-t">
-      <button onClick={toggleMic} className="text-gray-600 hover:text-black">
+      <button onClick={toggleMic} className="text-gray-600 hover:text-black" disabled={isLoading}>
         {listening ? <MicOff /> : <Mic />}
       </button>
+
       <TextareaAutosize
         value={input}
         onChange={(e) => setInput(e.target.value)}
@@ -98,14 +108,15 @@ const ChatForm = () => {
         minRows={1}
         maxRows={6}
         placeholder="メッセージを入力..."
-        disabled={isSending}
+        disabled={isLoading}
       />
+
       <button
         onClick={handleSend}
-        className="text-blue-500 hover:text-blue-700"
-        disabled={isSending}
+        className={`text-blue-500 hover:text-blue-700 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        disabled={isLoading}
       >
-        <Send />
+        {isLoading ? <Loader2 className="animate-spin" /> : <Send />}
       </button>
     </div>
   );

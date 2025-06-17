@@ -2,7 +2,7 @@ import { Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
-import { Components } from 'react-markdown';
+import type { Components } from 'react-markdown';
 
 type Props = {
   text: string;
@@ -12,7 +12,6 @@ type Props = {
 export const ChatMessage = ({ text, sender }: Props) => {
   const isUser = sender === 'user';
 
-  // Markdownの表示方法を定義
   const markdownComponents: Components = {
     code({ node, inline, className, children, ...props }) {
       const match = /language-(\w+)/.exec(className || '');
@@ -29,6 +28,39 @@ export const ChatMessage = ({ text, sender }: Props) => {
         <code className="bg-gray-200 px-1 rounded text-sm" {...props}>
           {children}
         </code>
+      );
+    },
+
+    blockquote({ children }) {
+      return (
+        <blockquote className="border-l-4 border-gray-400 pl-4 italic text-gray-700 my-2">
+          {children}
+        </blockquote>
+      );
+    },
+
+    ul({ children }) {
+      return <ul className="list-disc pl-6 my-2">{children}</ul>;
+    },
+
+    ol({ children }) {
+      return <ol className="list-decimal pl-6 my-2">{children}</ol>;
+    },
+
+    li({ children }) {
+      return <li className="mb-1">{children}</li>;
+    },
+
+    a({ href, children }) {
+      return (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 underline hover:text-blue-800"
+        >
+          {children}
+        </a>
       );
     },
   };

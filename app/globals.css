@@ -99,3 +99,8 @@
 .markdown .highlight pre {
   @apply bg-gray-100 !important;
 }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}

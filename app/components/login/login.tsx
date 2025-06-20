@@ -53,9 +53,9 @@ export default function Login() {
     <>
       {loading && <LoadingSpinner />}
 
-      <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 sm:px-6">
-        <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white shadow-lg rounded-2xl overflow-hidden">
-          
+      <div className="min-h-screen bg-gray-100 px-4 sm:px-6 py-8 overflow-auto">
+        <div className="flex flex-col md:flex-row w-full max-w-4xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden">
+                
           {/* 左側の説明＋画像 */}
           <div className="w-full md:w-1/2 bg-blue-500 p-8 flex flex-col justify-center text-white">
             <h2 className="text-3xl font-bold mb-4">

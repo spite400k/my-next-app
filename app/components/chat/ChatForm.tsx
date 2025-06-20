@@ -8,7 +8,7 @@ import { Mic, MicOff, Send, Loader2 } from 'lucide-react';
 
 const ChatForm = () => {
   const [input, setInput] = useState('');
-  const [chats, setChats] = useRecoilState(chatState);
+  const [, setChats] = useRecoilState(chatState);
   const [listening, setListening] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -84,7 +84,7 @@ const ChatForm = () => {
         setInput(prev => prev + transcript);
       };
 
-      recognition.onerror = (e: any) => {
+      recognition.onerror = (e: SpeechRecognitionEvent) => {
         console.error('音声認識エラー:', e);
         setListening(false);
       };

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Head from 'next/head';
 import { usePathname, useRouter } from 'next/navigation';
 import { useRecoilState } from 'recoil';
 import { userState } from '@/app/state/userState';
@@ -14,7 +13,6 @@ const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Supabaseのセッション確認
   useEffect(() => {
     const getUserData = async () => {
       const {
@@ -45,21 +43,23 @@ const Header = () => {
 
   return (
     <header className="flex justify-between items-center p-3 bg-blue-500 text-white">
-      <Head>
-        <title>ブログ作成</title>
-        <meta name="description" content="AIで簡単ブログ記事作成ページ" />
-      </Head>
       <h1 className="text-lg text-left">ブログ作成支援</h1>
-      <div className="flex flex-row">
+      <div className="flex flex-row items-center gap-2">
         <h2 className="text-right my-auto">ようこそ、{user?.name || 'ゲスト'}さん！</h2>
         {isAuthenticated ? (
-          <button className="mx-2 bg-white rounded text-black w-24">
-            <a href="/logout" className="block py-2 px-4 rounded hover:bg-gray-300">ログアウト</a>
+          <button
+            onClick={() => supabase.auth.signOut().then(() => router.push('/login'))}
+            className="mx-2 bg-white rounded text-black w-24 py-2 hover:bg-gray-300"
+          >
+            ログアウト
           </button>
         ) : (
-          <button className="mx-2 bg-white rounded text-black w-24">
-            <a href="/login" className="block py-2 px-4 rounded hover:bg-gray-300">ログイン</a>
-          </button>
+          <a
+            href="/login"
+            className="mx-2 bg-white rounded text-black w-24 py-2 block text-center hover:bg-gray-300"
+          >
+            ログイン
+          </a>
         )}
       </div>
     </header>

@@ -2,90 +2,131 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-// import bcrypt from "bcrypt";
-// const bcrypt = require("bcrypt");
-import LoadingSpinner from '../common/LoadingSpinner';
 
-export default function SignUpPage() {
+export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
-  //  ローディング状態を管理
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setLoading(true)
+    setLoading(true);
     try {
-    //   const hashedPassword = await bcrypt.hash(password, 10);
       const res = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password: password, name }),
+        body: JSON.stringify({ email, password, name }),
       });
+
       if (res.ok) {
         router.push("/login");
-        // router.push("/signin");
-
-    } else {
-        setError("Failed to create account.");
+      } else {
+        const json = await res.json();
+        setError(json.message || "登録に失敗しました。");
       }
     } catch (err) {
-      setError("Something went wrong.");
+      setError("通信エラーが発生しました。");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false)
   };
 
   return (
-    <>
-        {loading && <LoadingSpinner />}
-        <div className="flex h-screen items-center justify-center bg-gray-100">
-        <div className="w-full max-w-md bg-white p-6 rounded shadow-md">
-            <h1 className="text-2xl font-bold text-center mb-4">Sign Up</h1>
-            <form onSubmit={handleSignUp}>
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm mb-2">Name</label>
-                <input
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 sm:px-6">
+      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row">
+        
+        {/* 左側の説明や画像など */}
+        <div className="w-full md:w-1/2 bg-blue-500 text-white p-8 flex flex-col justify-center">
+          <h2 className="text-3xl font-bold mb-4">
+            新しいブログ作成を始めよう、AIとともに。
+          </h2>
+          <p className="mb-6">
+            ブログを書く時間がない、アイデアに悩むあなたをサポートします。
+          </p>
+          <img
+            src="/signup.webp"
+            alt="signup illustration"
+            className="max-w-full h-auto rounded-lg"
+          />
+        </div>
+
+        {/* 右側のフォーム */}
+        <div className="w-full md:w-1/2 p-8 flex flex-col justify-center">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">会員登録</h2>
+          {error && (
+            <p className="mb-4 text-sm text-red-600 border border-red-600 rounded px-3 py-2">
+              {error}
+            </p>
+          )}
+          <form onSubmit={handleSignUp} className="space-y-5">
+            <div>
+              <label className="block text-gray-700 mb-2" htmlFor="name">
+                お名前
+              </label>
+              <input
+                id="name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="山田 太郎"
                 required
-                />
+                autoComplete="name"
+              />
             </div>
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm mb-2">Email</label>
-                <input
+
+            <div>
+              <label className="block text-gray-700 mb-2" htmlFor="email">
+                メールアドレス
+              </label>
+              <input
+                id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="example@example.com"
                 required
-                />
+                autoComplete="email"
+              />
             </div>
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm mb-2">Password</label>
-                <input
+
+            <div>
+              <label className="block text-gray-700 mb-2" htmlFor="password">
+                パスワード
+              </label>
+              <input
+                id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+                className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="******"
                 required
-                />
+                autoComplete="new-password"
+              />
             </div>
-            {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+
             <button
-                type="submit"
-                className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition disabled:opacity-50"
             >
-                Sign Up
+              {loading ? "登録中..." : "会員登録"}
             </button>
-            </form>
+          </form>
+          <p className="text-center mt-6 text-gray-600">
+            すでにアカウントをお持ちですか？{" "}
+            <a href="/login" className="text-blue-600 hover:underline">
+              ログイン
+            </a>
+          </p>
         </div>
-        </div>
-    </>
+      </div>
+    </div>
   );
 }

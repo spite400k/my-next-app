@@ -93,7 +93,7 @@ const ChatForm = () => {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 w-full z-10 bg-white border-t p-2 sm:p-4 flex items-end gap-2">
+    <div className="w-full flex items-end gap-2">
       <button
         onClick={toggleMic}
         className="text-gray-600 hover:text-black w-10 h-10 flex items-center justify-center"

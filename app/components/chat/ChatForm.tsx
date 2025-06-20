@@ -17,7 +17,7 @@ const ChatForm = () => {
     if (!input.trim() || isLoading) return;
 
     const userMessage = { text: input, sender: 'user' as const, timestamp: new Date().toISOString() };
-    const loadingMessage = { text: '...', sender: 'ai' as const, timestamp: new Date().toISOString() }; // 仮のローディング表示
+    const loadingMessage = { text: '...', sender: 'ai' as const, timestamp: new Date().toISOString() };
 
     setChats(prev => [...prev, userMessage, loadingMessage]);
     setInput('');
@@ -31,30 +31,25 @@ const ChatForm = () => {
       });
 
       const data = await res.json();
-      console.log('📦 API応答:', data); // ← ここ追加
 
       const botMessage = {
         text: data.reply || 'エラーが発生しました。',
         sender: 'ai' as const,
-        timestamp: new Date().toISOString(), // タイムスタンプを追加
+        timestamp: new Date().toISOString(),
       };
 
-      // 最後のローディングメッセージを差し替える
-      setChats(prev => [
-        ...prev.slice(0, -1), // 最後の「...」を除く
-        botMessage,
-      ]);
+      setChats(prev => [...prev.slice(0, -1), botMessage]);
     } catch (error) {
       console.error('APIエラー:', error);
-      setChats(prev => [
-        ...prev.slice(0, -1),
-        { text: 'エラーが発生しました。', sender: 'ai' , timestamp: new Date().toISOString() },
-      ]);
+      setChats(prev => [...prev.slice(0, -1), {
+        text: 'エラーが発生しました。',
+        sender: 'ai',
+        timestamp: new Date().toISOString(),
+      }]);
     } finally {
       setIsLoading(false);
     }
   };
-
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -98,8 +93,13 @@ const ChatForm = () => {
   };
 
   return (
-    <div className="flex items-end gap-2 p-4 border-t">
-      <button onClick={toggleMic} className="text-gray-600 hover:text-black" disabled={isLoading}>
+    <div className="flex flex-wrap items-end gap-2 p-2 sm:p-4 border-t bg-white">
+      <button
+        onClick={toggleMic}
+        className="text-gray-600 hover:text-black w-10 h-10 flex items-center justify-center"
+        disabled={isLoading}
+        aria-label="音声入力"
+      >
         {listening ? <MicOff /> : <Mic />}
       </button>
 
@@ -107,7 +107,7 @@ const ChatForm = () => {
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="flex-grow resize-none border rounded px-3 py-2"
+        className="flex-grow w-full sm:w-auto resize-none border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
         minRows={1}
         maxRows={6}
         placeholder="メッセージを入力..."
@@ -116,8 +116,9 @@ const ChatForm = () => {
 
       <button
         onClick={handleSend}
-        className={`text-blue-500 hover:text-blue-700 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        className={`text-blue-500 hover:text-blue-700 w-10 h-10 flex items-center justify-center ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
         disabled={isLoading}
+        aria-label="送信"
       >
         {isLoading ? <Loader2 className="animate-spin" /> : <Send />}
       </button>

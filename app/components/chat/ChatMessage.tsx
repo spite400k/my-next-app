@@ -1,3 +1,5 @@
+'use client';
+
 import { Loader2, Copy } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -33,7 +35,7 @@ export const ChatMessage = ({ text, sender, timestamp }: Props) => {
 
       if (!inline && match) {
         return (
-          <div className="relative my-2 rounded border border-gray-300 bg-gray-900 text-white">
+          <div className="relative my-2 rounded border border-gray-300 bg-gray-900 text-white overflow-x-auto">
             <button
               onClick={handleCopy}
               className="absolute top-1 right-1 p-1 rounded bg-gray-700 hover:bg-gray-600"
@@ -46,7 +48,12 @@ export const ChatMessage = ({ text, sender, timestamp }: Props) => {
               style={oneDark}
               language={match[1]}
               PreTag="div"
-              customStyle={{ margin: 0, paddingTop: '1.5rem', paddingBottom: '1rem', borderRadius: '0.375rem' }}
+              customStyle={{
+                margin: 0,
+                paddingTop: '1.5rem',
+                paddingBottom: '1rem',
+                borderRadius: '0.375rem',
+              }}
               {...props}
             >
               {String(children).replace(/\n$/, '')}
@@ -82,7 +89,7 @@ export const ChatMessage = ({ text, sender, timestamp }: Props) => {
       };
 
       return (
-        <div className="relative my-2 rounded border border-gray-400 bg-gray-100 p-4 italic text-gray-700">
+        <div className="relative my-2 rounded border border-gray-400 bg-gray-100 p-4 italic text-gray-700 overflow-x-auto">
           <button
             onClick={handleCopy}
             className="absolute top-1 right-1 p-1 rounded bg-gray-300 hover:bg-gray-400"
@@ -126,41 +133,35 @@ export const ChatMessage = ({ text, sender, timestamp }: Props) => {
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-2`}>
       <div
         className={`
-          max-w-[80%]
-          px-4 py-3 rounded-xl whitespace-pre-wrap break-words
+          max-w-[90%] sm:max-w-[80%]
+          px-3 sm:px-4 py-2 sm:py-3
+          rounded-xl whitespace-pre-wrap break-words
           ${isUser
             ? 'bg-blue-500 text-white rounded-br-none ml-auto text-right'
-            : 'bg-gray-100 text-black rounded-bl-none'
-          }
+            : 'bg-gray-100 text-black rounded-bl-none'}
         `}
       >
-
-        { text === '...' ? (
+        {text === '...' ? (
           <div className="flex items-center gap-2 text-gray-600">
             <Loader2 className="animate-spin w-4 h-4" />
             <span>考え中...</span>
           </div>
         ) : (
           <div className="relative">
-            {/* マークダウン表示 */}
             <ReactMarkdown components={markdownComponents}>{text}</ReactMarkdown>
 
-            {/* コピー完了メッセージ */}
             {copiedBlock && (
               <div className="absolute bottom-6 right-1 text-xs bg-green-600 text-white rounded px-2 select-none">
                 コピーしました！
               </div>
             )}
 
-            {/* タイムスタンプ + コピーアイコン（右下） */}
             <div
-              className={`flex justify-end items-center space-x-2 mt-1 ${
+              className={`flex flex-wrap justify-end items-center space-x-2 mt-1 ${
                 isUser ? 'text-white/70' : 'text-gray-500'
-              }`}
+              } text-xs sm:text-xs`}
             >
-              <div className="text-xs">{formattedTime}</div>
-
-              {/* AIの発言のみアイコン表示 */}
+              <div>{formattedTime}</div>
               {!isUser && text !== '...' && (
                 <button
                   onClick={async () => {
@@ -180,8 +181,6 @@ export const ChatMessage = ({ text, sender, timestamp }: Props) => {
               )}
             </div>
           </div>
-
-
         )}
       </div>
     </div>

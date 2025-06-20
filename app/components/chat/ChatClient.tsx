@@ -13,12 +13,12 @@ const ChatClient = () => {
   const [chats, setChats] = useRecoilState(chatState);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  // 🔄 チャットの自動スクロール
+  // 🔄 自動スクロール
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chats]);
 
-  // ⬇️ ローカルストレージから初回読み込み
+  // ⬇️ 初期ロード
   useEffect(() => {
     const saved = localStorage.getItem(LOCAL_KEY);
     if (saved) {
@@ -33,14 +33,15 @@ const ChatClient = () => {
     }
   }, [setChats]);
 
-  // ⬆️ chats変更時に保存
+  // ⬆️ 保存
   useEffect(() => {
     localStorage.setItem(LOCAL_KEY, JSON.stringify(chats));
   }, [chats]);
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
-      <div className="flex-grow overflow-y-auto p-4">
+    <div className="flex flex-col h-screen max-h-screen overflow-hidden">
+      {/* チャット表示エリア */}
+      <div className="flex-grow overflow-y-auto px-2 sm:px-4 py-2 sm:py-4">
         {chats.map((chat, index) => (
           <ChatMessage
             key={index}
@@ -52,8 +53,10 @@ const ChatClient = () => {
         <div ref={bottomRef} />
       </div>
 
-      {/* 入力エリア */}
-      <ChatForm />
+      {/* フォーム（常に下部） */}
+      <div className="border-t border-gray-300 px-2 sm:px-4 py-2 bg-white">
+        <ChatForm />
+      </div>
     </div>
   );
 };

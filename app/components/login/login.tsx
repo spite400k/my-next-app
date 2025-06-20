@@ -57,7 +57,7 @@ export default function Login() {
         <div className="flex flex-col md:flex-row w-full max-w-4xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden">
                 
           {/* 左側の説明＋画像 */}
-          <div className="w-full md:w-1/2 bg-blue-500 p-8 flex flex-col justify-center text-white">
+          <div className="hidden md:flex w-full md:w-1/2 bg-blue-500 p-8 flex-col justify-center text-white">
             <h2 className="text-3xl font-bold mb-4">
               ブログ作成の新しいスタートを、AIと一緒に。
             </h2>

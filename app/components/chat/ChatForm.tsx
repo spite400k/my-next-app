@@ -93,7 +93,7 @@ const ChatForm = () => {
   };
 
   return (
-    <div className="flex flex-wrap items-end gap-2 p-2 sm:p-4 border-t bg-white">
+    <div className="fixed bottom-0 left-0 w-full z-10 bg-white border-t p-2 sm:p-4 flex items-end gap-2">
       <button
         onClick={toggleMic}
         className="text-gray-600 hover:text-black w-10 h-10 flex items-center justify-center"
@@ -109,7 +109,6 @@ const ChatForm = () => {
         onKeyDown={handleKeyDown}
         className="
           flex-grow
-          max-w-[calc(100%-3rem)]
           resize-none
           border
           rounded
@@ -119,13 +118,13 @@ const ChatForm = () => {
           focus:ring
           focus:ring-blue-300
           text-sm
+          max-h-36
         "
         minRows={1}
         maxRows={6}
         placeholder="メッセージを入力..."
         disabled={isLoading}
       />
-
 
       <button
         onClick={handleSend}

@@ -27,7 +27,7 @@ const Sidebar = () => {
   if (!isAuthenticated) return null;
 
   return (
-    <nav className="w-64 max-w-xs bg-blue-500 text-white p-4">
+    <nav className="hidden md:block w-64 max-w-xs bg-blue-500 text-white p-4">
       <ul>
         <li className="mb-2">
           <Link href="/choiceKeyword" className="block py-2 px-4 rounded hover:bg-gray-700">

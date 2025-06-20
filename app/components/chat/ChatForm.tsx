@@ -107,12 +107,25 @@ const ChatForm = () => {
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="flex-grow w-full sm:w-auto resize-none border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+        className="
+          flex-grow
+          max-w-[calc(100%-3rem)]
+          resize-none
+          border
+          rounded
+          px-3
+          py-2
+          focus:outline-none
+          focus:ring
+          focus:ring-blue-300
+          text-sm
+        "
         minRows={1}
         maxRows={6}
         placeholder="メッセージを入力..."
         disabled={isLoading}
       />
+
 
       <button
         onClick={handleSend}

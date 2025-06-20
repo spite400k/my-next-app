@@ -18,7 +18,7 @@ export const ChatMessage = ({ text, sender, timestamp }: Props) => {
   const [copiedBlock, setCopiedBlock] = useState(false);
 
   const markdownComponents = {
-    code({ node, inline, className, children, ...props }: any) {
+    code({ inline, className, children, ...props }: any) {
       const match = /language-(\w+)/.exec(className || '');
 
       const handleCopy = async () => {

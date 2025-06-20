@@ -64,7 +64,12 @@ export default function Login() {
             <p className="text-lg">
               ブログを書く時間がない、アイデアが浮かばない、そんな悩みを解決します。<br /><br />
             </p>
-            <img src="/login.webp" alt="login" className="max-w-full h-auto mt-4 md:mt-0" />
+            <img
+              src="/login.webp"
+              alt="login"
+              className="w-full max-w-xs sm:max-w-sm md:max-w-full h-auto mt-4 md:mt-0"
+            />
+
           </div>
 
           {/* 右側のログインフォーム */}

@@ -4,6 +4,7 @@ import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useRouter } from "next/navigation";
 import LoadingSpinner from '../common/LoadingSpinner';
+import { supabase } from '@/lib/supabase';
 
 export default function Login() {
   const [email, setEmail] = useState<string>('');
@@ -13,20 +14,48 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  // Supabaseのメールパスワード認証用関数
+  const signInWithEmail = async (email: string, password: string) => {
+    setError('');
+    setLoading(true);
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        setError(error.message);
+        setLoading(false);
+        return false;
+      }
+      if (data.user) {
+        // ログイン成功
+        setLoading(false);
+        return true;
+      }
+
+      setError('ログインに失敗しました。');
+      setLoading(false);
+
+      return false;
+
+    } catch (e) {
+
+      setError('予期せぬエラーが発生しました。');
+      setLoading(false);
+      return false;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true)
-    const result = await signIn('credentials', {
-      redirect: false,
-      email,
-      password, 
-    });
-
-    if (!result?.ok) {
-      setError('ログインに失敗しました。');
-      
-    }else{
+    // まずSupabaseでメール・パスワード認証を試みる
+    const success = await signInWithEmail(email, password);
+    if (success) {
+      // 認証成功時にNextAuthのセッションを更新したい場合は何らかの連携が必要だが
+      // 今回はSupabaseだけの認証で完結させる形としてルート遷移
       router.push("/");
+
+    }else{
+     setError('ログインに失敗しました。');
     }
     // ローディングを終了する
     setLoading(false)

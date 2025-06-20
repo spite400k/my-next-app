@@ -1,27 +1,51 @@
-"use client";
+'use client';
 
-import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export default function Dashboard() {
-  const { data: session } = useSession();
+  const [userName, setUserName] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    if (!session) {
+    const getUser = async () => {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
 
-      router.push('/');
-    }
-  }, [session, router]);
+      console.log('Session:', session);
+      console.log('Error:', error);
+      if (!session || error) {
+        router.push('/');
+        return;
+      }
 
-  if (!session) return null;
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        router.push('/');
+        return;
+      }
+
+      setUserName(user.user_metadata?.name || user.email || 'ゲスト');
+      setLoading(false);
+    };
+
+    getUser();
+  }, [router]);
+
+  if (loading) return null;
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">
       <div className="w-full max-w-md bg-white p-6 rounded shadow-md text-center">
         <h1 className="text-2xl font-bold mb-4">ダッシュボード</h1>
-        <p className="text-gray-700">ようこそ、{session.user?.name || 'ゲスト'}さん！</p>
+        <p className="text-gray-700">ようこそ、{userName}さん！</p>
       </div>
     </div>
   );
